@@ -3,13 +3,6 @@
   
   <url>
     <loc>https://bufferflies.github.io/about/</loc>
-    <lastmod>2017-08-28T21:41:52+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://bufferflies.github.io/categories/</loc>
     <lastmod>2020-11-04T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -17,6 +10,13 @@
   
   <url>
     <loc>https://bufferflies.github.io/</loc>
+    <lastmod>2020-11-04T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://bufferflies.github.io/categories/</loc>
     <lastmod>2020-11-04T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
