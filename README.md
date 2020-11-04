@@ -8,3 +8,9 @@ git add .
 git commit -m ""
 git push origin main 
 
+## 创建文章
+
+hugo new file.md
+
+eg:
+hugo new post/first.md

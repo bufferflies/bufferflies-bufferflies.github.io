@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>404 page not found - Jane - A super concise theme for Hugo</title>
+  <title>webflux源码设计2 - Jane - A super concise theme for Hugo</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="bufferflies" />
-  <meta name="description" content="Hugo theme jane example site." />
+  <meta name="description" content="核心类图 class RouterFunction { RouteFunction routeFunction; 路由执行器 List&amp;lt;HttpMessageReader&amp;lt;?&amp;gt;&amp;gt; messageReaders; request阅读器 getHandlerInternal(ServerWebExchange ex): HandlerFunction 获取对应的执行器 } class HandlerFunctionAdapter { supports(Object handler): boolean 只支持HandlerFunction 的函数 handler(ServerWebExchange ex,Object handler): HandlerResult 执" />
+
   <meta name="keywords" content="Hugo, theme, jane" />
 
 
@@ -34,7 +35,7 @@
 <meta name="generator" content="Hugo 0.78.0" />
 
 
-<link rel="canonical" href="https://bufferflies.github.io/404.html" />
+<link rel="canonical" href="https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%902/" />
 
 
 
@@ -58,16 +59,24 @@
 
 
 
-<meta property="og:title" content="404 Page not found" />
-<meta property="og:description" content="Hugo theme jane example site." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://bufferflies.github.io/404.html" />
+<meta property="og:title" content="webflux源码设计2" />
+<meta property="og:description" content="核心类图 class RouterFunction { RouteFunction routeFunction; 路由执行器 List&lt;HttpMessageReader&lt;?&gt;&gt; messageReaders; request阅读器 getHandlerInternal(ServerWebExchange ex): HandlerFunction 获取对应的执行器 } class HandlerFunctionAdapter { supports(Object handler): boolean 只支持HandlerFunction 的函数 handler(ServerWebExchange ex,Object handler): HandlerResult 执" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%902/" />
+<meta property="article:published_time" content="2014-09-28T00:00:00+00:00" />
+<meta property="article:modified_time" content="2014-09-28T00:00:00+00:00" />
+<meta itemprop="name" content="webflux源码设计2">
+<meta itemprop="description" content="核心类图 class RouterFunction { RouteFunction routeFunction; 路由执行器 List&lt;HttpMessageReader&lt;?&gt;&gt; messageReaders; request阅读器 getHandlerInternal(ServerWebExchange ex): HandlerFunction 获取对应的执行器 } class HandlerFunctionAdapter { supports(Object handler): boolean 只支持HandlerFunction 的函数 handler(ServerWebExchange ex,Object handler): HandlerResult 执">
+<meta itemprop="datePublished" content="2014-09-28T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2014-09-28T00:00:00+00:00" />
+<meta itemprop="wordCount" content="382">
 
-<meta itemprop="name" content="404 Page not found">
-<meta itemprop="description" content="Hugo theme jane example site.">
+
+
+<meta itemprop="keywords" content="spring,java," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="404 Page not found"/>
-<meta name="twitter:description" content="Hugo theme jane example site."/>
+<meta name="twitter:title" content="webflux源码设计2"/>
+<meta name="twitter:description" content="核心类图 class RouterFunction { RouteFunction routeFunction; 路由执行器 List&lt;HttpMessageReader&lt;?&gt;&gt; messageReaders; request阅读器 getHandlerInternal(ServerWebExchange ex): HandlerFunction 获取对应的执行器 } class HandlerFunctionAdapter { supports(Object handler): boolean 只支持HandlerFunction 的函数 handler(ServerWebExchange ex,Object handler): HandlerResult 执"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -326,21 +335,178 @@
     <main id="main" class="main bg-llight">
       <div class="content-wrapper">
         <div id="content" class="content container">
-          
-<div class="not-found">
-  <h1 class="error-emoji"></h1>
-  <p class="error-text">/* 404 page not found. */</p>
-  <p class="error-link"><a href="/">↑ Back Home ↑</a></p>
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">webflux源码设计2</h1>
+      
+      <div class="post-meta">
+        <time datetime="2014-09-28" class="post-time">
+          2014-09-28
+        </time>
+        <div class="post-category">
+            <a href="https://bufferflies.github.io/categories/webflux/"> webflux </a>
+            
+          </div>
+        
+
+        
+        
+
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title"></h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#核心类图">核心类图</a></li>
+    <li><a href="#时序图">时序图</a></li>
+  </ul>
+</nav>
+  </div>
 </div>
-<script>
-  var errorEmojiContainer = document.getElementsByClassName('error-emoji')[0];
-  var emojiArray = [
-    '\\(o_o)/', '(o^^)o', '(˚Δ˚)b', '(^-^*)', '(≥o≤)', '(^_^)b', '(·_·)',
-    '(=\'X\'=)', '(>_<)', '(;-;)', '\\(^Д^)/',
-  ];
-  var errorEmoji = emojiArray[Math.floor(Math.random() * emojiArray.length)];
-  errorEmojiContainer.appendChild(document.createTextNode(errorEmoji));
-</script>
+
+    
+    <div class="post-content">
+      <h2 id="核心类图">核心类图</h2>
+<pre><code class="language-plantuml" data-lang="plantuml">class RouterFunction {
+  RouteFunction routeFunction; 路由执行器
+  List&lt;HttpMessageReader&lt;?&gt;&gt; messageReaders; request阅读器
+  getHandlerInternal(ServerWebExchange ex): HandlerFunction 获取对应的执行器
+}
+
+class HandlerFunctionAdapter {
+  supports(Object handler): boolean 只支持HandlerFunction 的函数
+  handler(ServerWebExchange ex,Object handler): HandlerResult 执行方法并进行的转换
+}
+
+class ServerResponseResultHandler {
+    List&lt;HttpMessageWriter&lt;?&gt;&gt; messageWriters: response 编写器
+    List&lt;ViewResolver&gt; viewResolvers： 视图映射
+    supports(HandlerResult result)：boolean 只处理返回类型为ServerResponse类型
+    handleResult(ServerWebExchange exchange,HandlerResult result): void 将结果写入到response中
+    
+}
+
+interface HandlerFunction{
+   handle(ServerRequest request): T 最直接的操作 业户逻辑入口 一般lambda实现
+}
+
+interface RequestPredicate{
+    test(ServerRequest request): boolean
+}
+
+interface RouteFunction {
+  route(ServerRequest request): HandlerFunction 该路由是否能够满足该请求 核心
+  and(RouteFunction other):  SameComposedRouterFunction 合并
+  andOther(RouteFunction other): DifferentComposedRouterFunction 合并
+  andRoute(RequestPredicate predicate, HandlerFunction&lt;T&gt; handlerFunction): RouterFunction 比较底层
+  andNest(RequestPredicate predicate, RouterFunction&lt;T&gt;  routerFunction): RouterFunction 合并路由
+  filter(HandlerFilterFunction&lt;T, S&gt; filterFunction): 带有过滤的路由
+}
+</code></pre><p>解释：</p>
+<ol>
+<li>RouteFunction 会将所有的RouteFunction进行聚合</li>
+<li>过滤其实是在mapping的时候执行的</li>
+</ol>
+<p>初始化过滤：</p>
+<h2 id="时序图">时序图</h2>
+<pre><code class="language-plantuml" data-lang="plantuml">actor Processor as U
+control RouteFunction as R
+control Predicate as P 
+control HandlerFunctionAdapter as A
+control ServerResponseResultHandler as R
+
+U -&gt; R : getHandler
+R -&gt; P : test the request
+P --&gt;R : OK
+R --&gt;U : return HandlerFunction
+U -&gt; A : execute the handler
+A --&gt;U : return and wrap to HandlerResult
+U -&gt; R: test
+R -&gt;U : write value to response  
+</code></pre>
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title"></span>
+    <span class="item-content">bufferflies</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title"></span>
+    <span class="item-content">
+      2014-09-28
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title"></span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://bufferflies.github.io/tags/spring/">spring</a>
+          <a href="https://bufferflies.github.io/tags/java/">java</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/webflux%E8%A7%A3%E6%9E%901/">
+            
+            <i class="iconfont">
+              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
+</svg>
+
+            </i>
+            <span class="prev-text nav-default">webflux源码设计1</span>
+            <span class="prev-text nav-mobile"></span>
+          </a>
+        
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+    
+
+  
 
         </div>
       </div>
