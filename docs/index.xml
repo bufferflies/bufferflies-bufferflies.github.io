@@ -54,6 +54,7 @@ M -&amp;gt; C: find
 E -&amp;gt; R: consume 
 C -&amp;gt; A: adapt
 A -&amp;gt; E: transfer
+
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;对象解释
 Request: 代表用户的请求
 HandlerMapping： 处理器寻找器 根据请求参数，寻找到处理器
@@ -104,72 +105,72 @@ D --&amp;gt; U: render
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;附录&#34;&gt;附录&lt;/h3&gt;
 &lt;h4 id=&#34;附录一&#34;&gt;附录一&lt;/h4&gt;
 &lt;p&gt;spring 最核心代码&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;	public Mono&amp;lt;Void&amp;gt; handle(ServerWebExchange exchange) {
-		if (this.handlerMappings == null) {
-			return createNotFoundError();
-		}
-		// 找到所有注册的Mappings
-		return Flux.fromIterable(this.handlerMappings)
-				// 按序寻找可以处理该请求的Mapping
-				.concatMap(mapping -&amp;gt; mapping.getHandler(exchange))
-				// 只返回一个
-				.next()
-				//无法进行处理 抛出404异常
-				.switchIfEmpty(createNotFoundError())
-				// 寻找最适合的适配器并执行Handler 返回结果
-				.flatMap(handler -&amp;gt; invokeHandler(exchange, handler))
-				// 寻找结果处理器， 写回到Response中
-				.flatMap(result -&amp;gt; handleResult(exchange, result));
-	}
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;核心类单元测试构造&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; Mono&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;Void&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;ServerWebExchange exchange&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;handlerMappings&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;null&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; createNotFoundError&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+		&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color:#75715e&#34;&gt;// 找到所有注册的Mappings
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;		&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; Flux&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;fromIterable&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;handlerMappings&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+				&lt;span style=&#34;color:#75715e&#34;&gt;// 按序寻找可以处理该请求的Mapping
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;				&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;concatMap&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;mapping &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; mapping&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getHandler&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;exchange&lt;span style=&#34;color:#f92672&#34;&gt;))&lt;/span&gt;
+				&lt;span style=&#34;color:#75715e&#34;&gt;// 只返回一个
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;				&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;next&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;()&lt;/span&gt;
+				&lt;span style=&#34;color:#75715e&#34;&gt;//无法进行处理 抛出404异常
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;				&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;switchIfEmpty&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;createNotFoundError&lt;span style=&#34;color:#f92672&#34;&gt;())&lt;/span&gt;
+				&lt;span style=&#34;color:#75715e&#34;&gt;// 寻找最适合的适配器并执行Handler 返回结果
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;				&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;flatMap&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;handler &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; invokeHandler&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;exchange&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; handler&lt;span style=&#34;color:#f92672&#34;&gt;))&lt;/span&gt;
+				&lt;span style=&#34;color:#75715e&#34;&gt;// 寻找结果处理器， 写回到Response中
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;				&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;flatMap&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;result &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; handleResult&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;exchange&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; result&lt;span style=&#34;color:#f92672&#34;&gt;));&lt;/span&gt;
+	&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;核心类单元测试构造&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;映射处理器&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;// mock 一个HandlerMapping 接口 并使其继承Ordered 接口
-HandlerMapping hm1 = mock(HandlerMapping.class, withSettings().extraInterfaces(Ordered.class));
-// 实现Ordered接口
-given(((Ordered) hm1).getOrder()).willReturn(1);
-// 给定任何参数返回“1”
-given((hm1).getHandler(any())).willReturn(Mono.just((Supplier&amp;lt;String&amp;gt;) () -&amp;gt; &amp;quot;1&amp;quot;));
-&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// mock 一个HandlerMapping 接口 并使其继承Ordered 接口
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;HandlerMapping hm1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mock&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;HandlerMapping&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; withSettings&lt;span style=&#34;color:#f92672&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;extraInterfaces&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Ordered&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;));&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;// 实现Ordered接口
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;given&lt;span style=&#34;color:#f92672&#34;&gt;(((&lt;/span&gt;Ordered&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; hm1&lt;span style=&#34;color:#f92672&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getOrder&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;()).&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;willReturn&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;1&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;// 给定任何参数返回“1”
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;given&lt;span style=&#34;color:#f92672&#34;&gt;((&lt;/span&gt;hm1&lt;span style=&#34;color:#f92672&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getHandler&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;any&lt;span style=&#34;color:#f92672&#34;&gt;())).&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;willReturn&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Mono&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;just&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;((&lt;/span&gt;Supplier&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;String&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol&gt;
 &lt;li&gt;适配器&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;
-private static class SupplierHandlerAdapter implements HandlerAdapter {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;SupplierHandlerAdapter&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;implements&lt;/span&gt; HandlerAdapter &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
 
-   // 支持所有的Supplier类型的处理器
-       @Override
-       public boolean supports(Object handler) {
-           return handler instanceof Supplier;
-       }
-  // 执行处理器 将其结果转换为HandlerResult
-       @Override
-       public Mono&amp;lt;HandlerResult&amp;gt; handle(ServerWebExchange exchange, Object handler) {
-           return Mono.just(new HandlerResult(handler, ((Supplier&amp;lt;?&amp;gt;) handler).get(), RETURN_TYPE));
-       }
-   }
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+   &lt;span style=&#34;color:#75715e&#34;&gt;// 支持所有的Supplier类型的处理器
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;       &lt;span style=&#34;color:#a6e22e&#34;&gt;@Override&lt;/span&gt;
+       &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;supports&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Object handler&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+           &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; handler &lt;span style=&#34;color:#66d9ef&#34;&gt;instanceof&lt;/span&gt; Supplier&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+       &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+  &lt;span style=&#34;color:#75715e&#34;&gt;// 执行处理器 将其结果转换为HandlerResult
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;       &lt;span style=&#34;color:#a6e22e&#34;&gt;@Override&lt;/span&gt;
+       &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; Mono&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;HandlerResult&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;ServerWebExchange exchange&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; Object handler&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+           &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; Mono&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;just&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; HandlerResult&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;handler&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;((&lt;/span&gt;Supplier&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&amp;gt;)&lt;/span&gt; handler&lt;span style=&#34;color:#f92672&#34;&gt;).&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(),&lt;/span&gt; RETURN_TYPE&lt;span style=&#34;color:#f92672&#34;&gt;));&lt;/span&gt;
+       &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+   &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
 &lt;li&gt;结果处理器&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;private static class StringHandlerResultHandler implements HandlerResultHandler {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;StringHandlerResultHandler&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;implements&lt;/span&gt; HandlerResultHandler &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
 
-       @Override
-       public boolean supports(HandlerResult result) {
-           Object value = result.getReturnValue();
-           return value != null &amp;amp;&amp;amp; String.class.equals(value.getClass());
-       }
+       &lt;span style=&#34;color:#a6e22e&#34;&gt;@Override&lt;/span&gt;
+       &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;supports&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;HandlerResult result&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+           Object value &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; result&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getReturnValue&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;();&lt;/span&gt;
+           &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; value &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; String&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;equals&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;value&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getClass&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;());&lt;/span&gt;
+       &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
 
-       @Override
-       public Mono&amp;lt;Void&amp;gt; handleResult(ServerWebExchange exchange, HandlerResult result) {
-       // 获取response中的值
-           byte[] bytes = ((String) result.getReturnValue()).getBytes(StandardCharsets.UTF_8);
-           // 将其转换为DataBuffer类型
-           DataBuffer dataBuffer = new DefaultDataBufferFactory().wrap(bytes);
-           // 填充到response中
-           return exchange.getResponse().writeWith(Mono.just(dataBuffer));
-       }
-   }
-&lt;/code&gt;&lt;/pre&gt;</description>
+       &lt;span style=&#34;color:#a6e22e&#34;&gt;@Override&lt;/span&gt;
+       &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; Mono&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;Void&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;handleResult&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;ServerWebExchange exchange&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; HandlerResult result&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+       &lt;span style=&#34;color:#75715e&#34;&gt;// 获取response中的值
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;           &lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[]&lt;/span&gt; bytes &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;((&lt;/span&gt;String&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; result&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getReturnValue&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;()).&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getBytes&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;StandardCharsets&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;UTF_8&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+           &lt;span style=&#34;color:#75715e&#34;&gt;// 将其转换为DataBuffer类型
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;           DataBuffer dataBuffer &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; DefaultDataBufferFactory&lt;span style=&#34;color:#f92672&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;wrap&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;bytes&lt;span style=&#34;color:#f92672&#34;&gt;);&lt;/span&gt;
+           &lt;span style=&#34;color:#75715e&#34;&gt;// 填充到response中
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;           &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; exchange&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getResponse&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;().&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;writeWith&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Mono&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;just&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;dataBuffer&lt;span style=&#34;color:#f92672&#34;&gt;));&lt;/span&gt;
+       &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+   &lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
       
     </item>
     
