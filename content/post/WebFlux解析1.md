@@ -12,8 +12,10 @@ categories: [
 ---
 
 # Spring5 WebFlux 源码解析（一）
+
 ## 场景：
  能够将**请求**适配到**指定方法**，**调用**方法并**返回**
+
 ## 领域图
 
 ```plantuml
@@ -29,6 +31,7 @@ M -> C: find
 E -> R: consume 
 C -> A: adapt
 A -> E: transfer
+
 ```
 
 对象解释
@@ -94,7 +97,8 @@ D --> U: render
 ### 附录
 #### 附录一
 spring 最核心代码
-```
+
+```java
 	public Mono<Void> handle(ServerWebExchange exchange) {
 		if (this.handlerMappings == null) {
 			return createNotFoundError();
@@ -115,7 +119,8 @@ spring 最核心代码
 ```
  核心类单元测试构造
  1. 映射处理器
- ```
+
+ ```java
  // mock 一个HandlerMapping 接口 并使其继承Ordered 接口
  HandlerMapping hm1 = mock(HandlerMapping.class, withSettings().extraInterfaces(Ordered.class));
  // 实现Ordered接口
@@ -124,7 +129,8 @@ given(((Ordered) hm1).getOrder()).willReturn(1);
 given((hm1).getHandler(any())).willReturn(Mono.just((Supplier<String>) () -> "1"));
  ```
  1. 适配器
- ```
+
+ ```java
  
  private static class SupplierHandlerAdapter implements HandlerAdapter {
 
@@ -141,7 +147,8 @@ given((hm1).getHandler(any())).willReturn(Mono.just((Supplier<String>) () -> "1"
 	}
  ```
  2. 结果处理器
- ```
+
+ ```java
  private static class StringHandlerResultHandler implements HandlerResultHandler {
 
 		@Override
