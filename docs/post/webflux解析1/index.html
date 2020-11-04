@@ -63,12 +63,12 @@
 <meta property="og:description" content="Spring5 WebFlux 源码解析（一） 场景： 能够将请求适配到指定方法，调用方法并返回 领域图 storage Request as W storage HandlerMapping as M storage HandlerAdapter as A storage HandlerResultHandler as R entity Result as E control Handler as C W -&gt; M: trigger M -&gt; C: find E -&gt; R:" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%901/" />
-<meta property="article:published_time" content="2014-09-28T00:00:00+00:00" />
-<meta property="article:modified_time" content="2014-09-28T00:00:00+00:00" />
+<meta property="article:published_time" content="2020-11-04T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-11-04T00:00:00+00:00" />
 <meta itemprop="name" content="webflux源码设计1">
 <meta itemprop="description" content="Spring5 WebFlux 源码解析（一） 场景： 能够将请求适配到指定方法，调用方法并返回 领域图 storage Request as W storage HandlerMapping as M storage HandlerAdapter as A storage HandlerResultHandler as R entity Result as E control Handler as C W -&gt; M: trigger M -&gt; C: find E -&gt; R:">
-<meta itemprop="datePublished" content="2014-09-28T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2014-09-28T00:00:00+00:00" />
+<meta itemprop="datePublished" content="2020-11-04T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-11-04T00:00:00+00:00" />
 <meta itemprop="wordCount" content="747">
 
 
@@ -86,8 +86,6 @@
   <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
 <![endif]-->
-
-
 
 
 </head>
@@ -341,8 +339,8 @@
       <h1 class="post-title">webflux源码设计1</h1>
       
       <div class="post-meta">
-        <time datetime="2014-09-28" class="post-time">
-          2014-09-28
+        <time datetime="2020-11-04" class="post-time">
+          2020-11-04
         </time>
         <div class="post-category">
             <a href="https://bufferflies.github.io/categories/webflux/"> webflux </a>
@@ -448,71 +446,71 @@ D --&gt; U: render
 </code></pre><h3 id="附录">附录</h3>
 <h4 id="附录一">附录一</h4>
 <p>spring 最核心代码</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">	<span style="color:#66d9ef">public</span> Mono<span style="color:#f92672">&lt;</span>Void<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">handle</span><span style="color:#f92672">(</span>ServerWebExchange exchange<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-		<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">handlerMappings</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-			<span style="color:#66d9ef">return</span> createNotFoundError<span style="color:#f92672">();</span>
-		<span style="color:#f92672">}</span>
-		<span style="color:#75715e">// 找到所有注册的Mappings
-</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">return</span> Flux<span style="color:#f92672">.</span><span style="color:#a6e22e">fromIterable</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">handlerMappings</span><span style="color:#f92672">)</span>
-				<span style="color:#75715e">// 按序寻找可以处理该请求的Mapping
-</span><span style="color:#75715e"></span>				<span style="color:#f92672">.</span><span style="color:#a6e22e">concatMap</span><span style="color:#f92672">(</span>mapping <span style="color:#f92672">-&gt;</span> mapping<span style="color:#f92672">.</span><span style="color:#a6e22e">getHandler</span><span style="color:#f92672">(</span>exchange<span style="color:#f92672">))</span>
-				<span style="color:#75715e">// 只返回一个
-</span><span style="color:#75715e"></span>				<span style="color:#f92672">.</span><span style="color:#a6e22e">next</span><span style="color:#f92672">()</span>
-				<span style="color:#75715e">//无法进行处理 抛出404异常
-</span><span style="color:#75715e"></span>				<span style="color:#f92672">.</span><span style="color:#a6e22e">switchIfEmpty</span><span style="color:#f92672">(</span>createNotFoundError<span style="color:#f92672">())</span>
-				<span style="color:#75715e">// 寻找最适合的适配器并执行Handler 返回结果
-</span><span style="color:#75715e"></span>				<span style="color:#f92672">.</span><span style="color:#a6e22e">flatMap</span><span style="color:#f92672">(</span>handler <span style="color:#f92672">-&gt;</span> invokeHandler<span style="color:#f92672">(</span>exchange<span style="color:#f92672">,</span> handler<span style="color:#f92672">))</span>
-				<span style="color:#75715e">// 寻找结果处理器， 写回到Response中
-</span><span style="color:#75715e"></span>				<span style="color:#f92672">.</span><span style="color:#a6e22e">flatMap</span><span style="color:#f92672">(</span>result <span style="color:#f92672">-&gt;</span> handleResult<span style="color:#f92672">(</span>exchange<span style="color:#f92672">,</span> result<span style="color:#f92672">));</span>
-	<span style="color:#f92672">}</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">	public Mono<span style="color:#000;font-weight:bold">&lt;</span>Void<span style="color:#000;font-weight:bold">&gt;</span> handle(ServerWebExchange exchange) {
+		<span style="color:#000;font-weight:bold">if</span> (this.handlerMappings <span style="color:#000;font-weight:bold">==</span> null) {
+			<span style="color:#000;font-weight:bold">return</span> createNotFoundError();
+		}
+		<span style="color:#998;font-style:italic">// 找到所有注册的Mappings
+</span><span style="color:#998;font-style:italic"></span>		<span style="color:#000;font-weight:bold">return</span> Flux.fromIterable(this.handlerMappings)
+				<span style="color:#998;font-style:italic">// 按序寻找可以处理该请求的Mapping
+</span><span style="color:#998;font-style:italic"></span>				.concatMap(mapping <span style="color:#000;font-weight:bold">-&gt;</span> mapping.getHandler(exchange))
+				<span style="color:#998;font-style:italic">// 只返回一个
+</span><span style="color:#998;font-style:italic"></span>				.next()
+				<span style="color:#998;font-style:italic">//无法进行处理 抛出404异常
+</span><span style="color:#998;font-style:italic"></span>				.switchIfEmpty(createNotFoundError())
+				<span style="color:#998;font-style:italic">// 寻找最适合的适配器并执行Handler 返回结果
+</span><span style="color:#998;font-style:italic"></span>				.flatMap(handler <span style="color:#000;font-weight:bold">-&gt;</span> invokeHandler(exchange, handler))
+				<span style="color:#998;font-style:italic">// 寻找结果处理器， 写回到Response中
+</span><span style="color:#998;font-style:italic"></span>				.flatMap(result <span style="color:#000;font-weight:bold">-&gt;</span> handleResult(exchange, result));
+	}
 </code></pre></div><p>核心类单元测试构造</p>
 <ol>
 <li>映射处理器</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// mock 一个HandlerMapping 接口 并使其继承Ordered 接口
-</span><span style="color:#75715e"></span>HandlerMapping hm1 <span style="color:#f92672">=</span> mock<span style="color:#f92672">(</span>HandlerMapping<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> withSettings<span style="color:#f92672">().</span><span style="color:#a6e22e">extraInterfaces</span><span style="color:#f92672">(</span>Ordered<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">));</span>
-<span style="color:#75715e">// 实现Ordered接口
-</span><span style="color:#75715e"></span>given<span style="color:#f92672">(((</span>Ordered<span style="color:#f92672">)</span> hm1<span style="color:#f92672">).</span><span style="color:#a6e22e">getOrder</span><span style="color:#f92672">()).</span><span style="color:#a6e22e">willReturn</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
-<span style="color:#75715e">// 给定任何参数返回“1”
-</span><span style="color:#75715e"></span>given<span style="color:#f92672">((</span>hm1<span style="color:#f92672">).</span><span style="color:#a6e22e">getHandler</span><span style="color:#f92672">(</span>any<span style="color:#f92672">())).</span><span style="color:#a6e22e">willReturn</span><span style="color:#f92672">(</span>Mono<span style="color:#f92672">.</span><span style="color:#a6e22e">just</span><span style="color:#f92672">((</span>Supplier<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;)</span> <span style="color:#f92672">()</span> <span style="color:#f92672">-&gt;</span> <span style="color:#e6db74">&#34;1&#34;</span><span style="color:#f92672">));</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#998;font-style:italic">// mock 一个HandlerMapping 接口 并使其继承Ordered 接口
+</span><span style="color:#998;font-style:italic"></span>HandlerMapping hm1 <span style="color:#000;font-weight:bold">=</span> mock<span style="color:#000;font-weight:bold">(</span>HandlerMapping<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">class</span><span style="color:#000;font-weight:bold">,</span> withSettings<span style="color:#000;font-weight:bold">().</span><span style="color:#008080">extraInterfaces</span><span style="color:#000;font-weight:bold">(</span>Ordered<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">class</span><span style="color:#000;font-weight:bold">));</span>
+<span style="color:#998;font-style:italic">// 实现Ordered接口
+</span><span style="color:#998;font-style:italic"></span>given<span style="color:#000;font-weight:bold">(((</span>Ordered<span style="color:#000;font-weight:bold">)</span> hm1<span style="color:#000;font-weight:bold">).</span><span style="color:#008080">getOrder</span><span style="color:#000;font-weight:bold">()).</span><span style="color:#008080">willReturn</span><span style="color:#000;font-weight:bold">(</span>1<span style="color:#000;font-weight:bold">);</span>
+<span style="color:#998;font-style:italic">// 给定任何参数返回“1”
+</span><span style="color:#998;font-style:italic"></span>given<span style="color:#000;font-weight:bold">((</span>hm1<span style="color:#000;font-weight:bold">).</span><span style="color:#008080">getHandler</span><span style="color:#000;font-weight:bold">(</span>any<span style="color:#000;font-weight:bold">())).</span><span style="color:#008080">willReturn</span><span style="color:#000;font-weight:bold">(</span>Mono<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">just</span><span style="color:#000;font-weight:bold">((</span>Supplier<span style="color:#000;font-weight:bold">&lt;</span>String<span style="color:#000;font-weight:bold">&gt;)</span> <span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">-&gt;</span> <span style="color:#d14">&#34;1&#34;</span><span style="color:#000;font-weight:bold">));</span>
 </code></pre></div><ol>
 <li>适配器</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">
-<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SupplierHandlerAdapter</span> <span style="color:#66d9ef">implements</span> HandlerAdapter <span style="color:#f92672">{</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">
+<span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">SupplierHandlerAdapter</span> <span style="color:#000;font-weight:bold">implements</span> HandlerAdapter <span style="color:#000;font-weight:bold">{</span>
 
-   <span style="color:#75715e">// 支持所有的Supplier类型的处理器
-</span><span style="color:#75715e"></span>       <span style="color:#a6e22e">@Override</span>
-       <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">supports</span><span style="color:#f92672">(</span>Object handler<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-           <span style="color:#66d9ef">return</span> handler <span style="color:#66d9ef">instanceof</span> Supplier<span style="color:#f92672">;</span>
-       <span style="color:#f92672">}</span>
-  <span style="color:#75715e">// 执行处理器 将其结果转换为HandlerResult
-</span><span style="color:#75715e"></span>       <span style="color:#a6e22e">@Override</span>
-       <span style="color:#66d9ef">public</span> Mono<span style="color:#f92672">&lt;</span>HandlerResult<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">handle</span><span style="color:#f92672">(</span>ServerWebExchange exchange<span style="color:#f92672">,</span> Object handler<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-           <span style="color:#66d9ef">return</span> Mono<span style="color:#f92672">.</span><span style="color:#a6e22e">just</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> HandlerResult<span style="color:#f92672">(</span>handler<span style="color:#f92672">,</span> <span style="color:#f92672">((</span>Supplier<span style="color:#f92672">&lt;?&gt;)</span> handler<span style="color:#f92672">).</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(),</span> RETURN_TYPE<span style="color:#f92672">));</span>
-       <span style="color:#f92672">}</span>
-   <span style="color:#f92672">}</span>
+   <span style="color:#998;font-style:italic">// 支持所有的Supplier类型的处理器
+</span><span style="color:#998;font-style:italic"></span>       <span style="color:#3c5d5d;font-weight:bold">@Override</span>
+       <span style="color:#000;font-weight:bold">public</span> <span style="color:#458;font-weight:bold">boolean</span> <span style="color:#900;font-weight:bold">supports</span><span style="color:#000;font-weight:bold">(</span>Object handler<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+           <span style="color:#000;font-weight:bold">return</span> handler <span style="color:#000;font-weight:bold">instanceof</span> Supplier<span style="color:#000;font-weight:bold">;</span>
+       <span style="color:#000;font-weight:bold">}</span>
+  <span style="color:#998;font-style:italic">// 执行处理器 将其结果转换为HandlerResult
+</span><span style="color:#998;font-style:italic"></span>       <span style="color:#3c5d5d;font-weight:bold">@Override</span>
+       <span style="color:#000;font-weight:bold">public</span> Mono<span style="color:#000;font-weight:bold">&lt;</span>HandlerResult<span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#900;font-weight:bold">handle</span><span style="color:#000;font-weight:bold">(</span>ServerWebExchange exchange<span style="color:#000;font-weight:bold">,</span> Object handler<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+           <span style="color:#000;font-weight:bold">return</span> Mono<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">just</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000;font-weight:bold">new</span> HandlerResult<span style="color:#000;font-weight:bold">(</span>handler<span style="color:#000;font-weight:bold">,</span> <span style="color:#000;font-weight:bold">((</span>Supplier<span style="color:#000;font-weight:bold">&lt;?&gt;)</span> handler<span style="color:#000;font-weight:bold">).</span><span style="color:#008080">get</span><span style="color:#000;font-weight:bold">(),</span> RETURN_TYPE<span style="color:#000;font-weight:bold">));</span>
+       <span style="color:#000;font-weight:bold">}</span>
+   <span style="color:#000;font-weight:bold">}</span>
 </code></pre></div><ol start="2">
 <li>结果处理器</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StringHandlerResultHandler</span> <span style="color:#66d9ef">implements</span> HandlerResultHandler <span style="color:#f92672">{</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">StringHandlerResultHandler</span> <span style="color:#000;font-weight:bold">implements</span> HandlerResultHandler <span style="color:#000;font-weight:bold">{</span>
 
-       <span style="color:#a6e22e">@Override</span>
-       <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">supports</span><span style="color:#f92672">(</span>HandlerResult result<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-           Object value <span style="color:#f92672">=</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">getReturnValue</span><span style="color:#f92672">();</span>
-           <span style="color:#66d9ef">return</span> value <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> String<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>value<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">());</span>
-       <span style="color:#f92672">}</span>
+       <span style="color:#3c5d5d;font-weight:bold">@Override</span>
+       <span style="color:#000;font-weight:bold">public</span> <span style="color:#458;font-weight:bold">boolean</span> <span style="color:#900;font-weight:bold">supports</span><span style="color:#000;font-weight:bold">(</span>HandlerResult result<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+           Object value <span style="color:#000;font-weight:bold">=</span> result<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getReturnValue</span><span style="color:#000;font-weight:bold">();</span>
+           <span style="color:#000;font-weight:bold">return</span> value <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">null</span> <span style="color:#000;font-weight:bold">&amp;&amp;</span> String<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">class</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">equals</span><span style="color:#000;font-weight:bold">(</span>value<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getClass</span><span style="color:#000;font-weight:bold">());</span>
+       <span style="color:#000;font-weight:bold">}</span>
 
-       <span style="color:#a6e22e">@Override</span>
-       <span style="color:#66d9ef">public</span> Mono<span style="color:#f92672">&lt;</span>Void<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">handleResult</span><span style="color:#f92672">(</span>ServerWebExchange exchange<span style="color:#f92672">,</span> HandlerResult result<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-       <span style="color:#75715e">// 获取response中的值
-</span><span style="color:#75715e"></span>           <span style="color:#66d9ef">byte</span><span style="color:#f92672">[]</span> bytes <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>String<span style="color:#f92672">)</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">getReturnValue</span><span style="color:#f92672">()).</span><span style="color:#a6e22e">getBytes</span><span style="color:#f92672">(</span>StandardCharsets<span style="color:#f92672">.</span><span style="color:#a6e22e">UTF_8</span><span style="color:#f92672">);</span>
-           <span style="color:#75715e">// 将其转换为DataBuffer类型
-</span><span style="color:#75715e"></span>           DataBuffer dataBuffer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DefaultDataBufferFactory<span style="color:#f92672">().</span><span style="color:#a6e22e">wrap</span><span style="color:#f92672">(</span>bytes<span style="color:#f92672">);</span>
-           <span style="color:#75715e">// 填充到response中
-</span><span style="color:#75715e"></span>           <span style="color:#66d9ef">return</span> exchange<span style="color:#f92672">.</span><span style="color:#a6e22e">getResponse</span><span style="color:#f92672">().</span><span style="color:#a6e22e">writeWith</span><span style="color:#f92672">(</span>Mono<span style="color:#f92672">.</span><span style="color:#a6e22e">just</span><span style="color:#f92672">(</span>dataBuffer<span style="color:#f92672">));</span>
-       <span style="color:#f92672">}</span>
-   <span style="color:#f92672">}</span>
+       <span style="color:#3c5d5d;font-weight:bold">@Override</span>
+       <span style="color:#000;font-weight:bold">public</span> Mono<span style="color:#000;font-weight:bold">&lt;</span>Void<span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#900;font-weight:bold">handleResult</span><span style="color:#000;font-weight:bold">(</span>ServerWebExchange exchange<span style="color:#000;font-weight:bold">,</span> HandlerResult result<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+       <span style="color:#998;font-style:italic">// 获取response中的值
+</span><span style="color:#998;font-style:italic"></span>           <span style="color:#458;font-weight:bold">byte</span><span style="color:#000;font-weight:bold">[]</span> bytes <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">((</span>String<span style="color:#000;font-weight:bold">)</span> result<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getReturnValue</span><span style="color:#000;font-weight:bold">()).</span><span style="color:#008080">getBytes</span><span style="color:#000;font-weight:bold">(</span>StandardCharsets<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">UTF_8</span><span style="color:#000;font-weight:bold">);</span>
+           <span style="color:#998;font-style:italic">// 将其转换为DataBuffer类型
+</span><span style="color:#998;font-style:italic"></span>           DataBuffer dataBuffer <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> DefaultDataBufferFactory<span style="color:#000;font-weight:bold">().</span><span style="color:#008080">wrap</span><span style="color:#000;font-weight:bold">(</span>bytes<span style="color:#000;font-weight:bold">);</span>
+           <span style="color:#998;font-style:italic">// 填充到response中
+</span><span style="color:#998;font-style:italic"></span>           <span style="color:#000;font-weight:bold">return</span> exchange<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getResponse</span><span style="color:#000;font-weight:bold">().</span><span style="color:#008080">writeWith</span><span style="color:#000;font-weight:bold">(</span>Mono<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">just</span><span style="color:#000;font-weight:bold">(</span>dataBuffer<span style="color:#000;font-weight:bold">));</span>
+       <span style="color:#000;font-weight:bold">}</span>
+   <span style="color:#000;font-weight:bold">}</span>
 </code></pre></div>
     </div>
 
@@ -526,7 +524,7 @@ D --&gt; U: render
   <p class="copyright-item">
     <span class="item-title"></span>
     <span class="item-content">
-      2014-09-28
+      2020-11-04
       
     </span>
   </p>

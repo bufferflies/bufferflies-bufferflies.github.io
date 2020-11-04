@@ -6,11 +6,11 @@
     <description>Recent content in webflux on Jane - A super concise theme for Hugo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 28 Sep 2014 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/categories/webflux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 04 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/categories/webflux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>webflux源码设计1</title>
       <link>https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%901/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 04 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%901/</guid>
       <description>Spring5 WebFlux 源码解析（一） 场景： 能够将请求适配到指定方法，调用方法并返回 领域图 storage Request as W storage HandlerMapping as M storage HandlerAdapter as A storage HandlerResultHandler as R entity Result as E control Handler as C W -&amp;gt; M: trigger M -&amp;gt; C: find E -&amp;gt; R:</description>
@@ -19,7 +19,7 @@
     <item>
       <title>webflux源码设计2</title>
       <link>https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%902/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 04 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%902/</guid>
       <description>核心类图 class RouterFunction { RouteFunction routeFunction; 路由执行器 List&amp;lt;HttpMessageReader&amp;lt;?&amp;gt;&amp;gt; messageReaders; request阅读器 getHandlerInternal(ServerWebExchange ex): HandlerFunction 获取对应的执行器 } class HandlerFunctionAdapter { supports(Object handler): boolean 只支持HandlerFunction 的函数 handler(ServerWebExchange ex,Object handler): HandlerResult 执</description>

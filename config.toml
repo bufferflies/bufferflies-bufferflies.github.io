@@ -82,4 +82,18 @@ defaultContentLanguage = "zh"           # Default language to use
 
   [params.social]                                         # 社交链接
     a-email = "1045931706@qq.com"
-   
+
+
+[markup]
+  [markup.highlight]
+    anchorLineNos = false
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ""
+    lineAnchors = ""
+    lineNoStart = 1
+    lineNos = false
+    lineNumbersInTable = true
+    noClasses = true
+    style = "github"
+    tabWidth = 4
