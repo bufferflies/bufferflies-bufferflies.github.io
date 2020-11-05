@@ -10,14 +10,49 @@
   
   <url>
     <loc>https://bufferflies.github.io/</loc>
-    <lastmod>2020-11-04T00:00:00+00:00</lastmod>
+    <lastmod>2020-11-05T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://bufferflies.github.io/categories/</loc>
-    <lastmod>2020-11-04T00:00:00+00:00</lastmod>
+    <lastmod>2020-11-05T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://bufferflies.github.io/tags/net/</loc>
+    <lastmod>2020-11-05T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://bufferflies.github.io/categories/net/</loc>
+    <lastmod>2020-11-05T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://bufferflies.github.io/post/</loc>
+    <lastmod>2020-11-05T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://bufferflies.github.io/tags/</loc>
+    <lastmod>2020-11-05T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C/</loc>
+    <lastmod>2020-11-05T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -30,21 +65,7 @@
   </url>
   
   <url>
-    <loc>https://bufferflies.github.io/post/</loc>
-    <lastmod>2020-11-04T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://bufferflies.github.io/tags/spring/</loc>
-    <lastmod>2020-11-04T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://bufferflies.github.io/tags/</loc>
     <lastmod>2020-11-04T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

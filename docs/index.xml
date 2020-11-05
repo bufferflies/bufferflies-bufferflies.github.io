@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>bufferflies</copyright>
-    <lastBuildDate>Wed, 04 Nov 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 05 Nov 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://bufferflies.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -24,6 +24,19 @@
     </item>
     
     <item>
+      <title>网络基础</title>
+      <link>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C/</link>
+      <pubDate>Thu, 05 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C/</guid>
+      
+        <description>&lt;h1 id=&#34;网络基础协议&#34;&gt;网络基础协议&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;https://bufferflies.github.io/pachong.png&#34; alt=&#34;test&#34;&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>webflux源码设计1</title>
       <link>https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%901/</link>
       <pubDate>Wed, 04 Nov 2020 00:00:00 +0000</pubDate>
@@ -31,7 +44,6 @@
       <guid>https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%901/</guid>
       
         <description>&lt;h1 id=&#34;spring5-webflux-源码解析一&#34;&gt;Spring5 WebFlux 源码解析（一）&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;%22/static/pachong.png&#34; alt=&#34;test&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;场景&#34;&gt;场景：&lt;/h2&gt;
 &lt;p&gt;能够将&lt;strong&gt;请求&lt;/strong&gt;适配到&lt;strong&gt;指定方法&lt;/strong&gt;，&lt;strong&gt;调用&lt;/strong&gt;方法并&lt;strong&gt;返回&lt;/strong&gt;&lt;/p&gt;
 &lt;h2 id=&#34;领域图&#34;&gt;领域图&lt;/h2&gt;

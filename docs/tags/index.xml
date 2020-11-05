@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>bufferflies</copyright>
-    <lastBuildDate>Wed, 04 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>net</title>
+      <link>https://bufferflies.github.io/tags/net/</link>
+      <pubDate>Thu, 05 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/tags/net/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>java</title>
       <link>https://bufferflies.github.io/tags/java/</link>
