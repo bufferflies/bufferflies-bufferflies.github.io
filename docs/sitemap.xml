@@ -92,4 +92,22 @@
     <priority>0.5</priority>
   </url>
   
+  <url>
+    <loc>https://bufferflies.github.io/categories/shell/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://bufferflies.github.io/tags/tools/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://bufferflies.github.io/post/zsh-%E5%AE%89%E8%A3%85/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
 </urlset>

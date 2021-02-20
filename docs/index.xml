@@ -247,5 +247,53 @@ R -&amp;gt;U : write value to response
       
     </item>
     
+    <item>
+      <title>zsh</title>
+      <link>https://bufferflies.github.io/post/zsh-%E5%AE%89%E8%A3%85/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/zsh-%E5%AE%89%E8%A3%85/</guid>
+      
+        <description>&lt;h2 id=&#34;安装oh-my-zsh&#34;&gt;安装oh-my-zsh&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;sh -c &amp;quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;安装插件&#34;&gt;安装插件&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;进入oh-my-zsh插件库中&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cd ~/.oh-my-zsh/custom/plugins/
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;下载插件（自动补全为例）&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git clone git://github.com/zsh-users/zsh-autosuggestions
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其实插件名就是仓库名（zsh-autosuggestions）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;插件生效
+vim ~/.zshrc
+找到plugin配置，添加如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;plugins=(
+    git
+    zsh-autosuggestions
+)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;生效.zshrc 文件
+source ~/.zsh&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;安装fzf&#34;&gt;安装fzf&lt;/h2&gt;
+&lt;p&gt;支持历史命令查看
+&lt;a href=&#34;https://www.jianshu.com/p/74ff1e637b2c&#34;&gt;https://www.jianshu.com/p/74ff1e637b2c&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.jianshu.com/p/b6af829ec2dc&#34;&gt;安装oh-my-zsh&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.csdn.net/xfxf0520/article/details/84589446&#34;&gt;插件安装&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://learnku.com/tensorflow/t/5790/ultimate-terminal-zshautojump&#34;&gt;autojumo&lt;/a&gt; 记录cd去过的路径 后面可以直接通过 j 文件夹进行跳转&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://juejin.im/post/5d905a886fb9a04e3902d7a9&#34;&gt;fzf&lt;/a&gt; 记录历史命令，非常直观显示最近使用的命令&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
   </channel>
 </rss>

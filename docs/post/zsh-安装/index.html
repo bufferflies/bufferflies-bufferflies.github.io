@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>webflux · blog for bufferflies</title>
+  <title>zsh - blog for bufferflies</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="bufferflies" />
-  <meta name="description" content="blog for bufferflies" />
+  <meta name="description" content="安装oh-my-zsh sh -c &amp;quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&amp;quot; 安装插件 进入oh-my-zsh插件库中 cd ~/.oh-my-zsh/custom/plugins/ 下载插件（自动补全为例） git clone git://github.com/zsh-users/zsh-autosuggestions 其实插件名就是仓库名（zsh-aut" />
+
   <meta name="keywords" content="Bufferflies, IT, " />
 
 
@@ -34,8 +35,8 @@
 <meta name="generator" content="Hugo 0.78.2" />
 
 
-<link rel="canonical" href="https://bufferflies.github.io/categories/webflux/" />
-<link href="/categories/webflux/index.xml" rel="alternate" type="application/rss+xml" title="blog for bufferflies" />
+<link rel="canonical" href="https://bufferflies.github.io/post/zsh-%E5%AE%89%E8%A3%85/" />
+
 
 
 
@@ -58,16 +59,22 @@
 
 
 
-<meta property="og:title" content="webflux" />
-<meta property="og:description" content="blog for bufferflies" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://bufferflies.github.io/categories/webflux/" />
-<meta property="og:updated_time" content="2020-11-04T00:00:00+00:00" />
-<meta itemprop="name" content="webflux">
-<meta itemprop="description" content="blog for bufferflies">
+<meta property="og:title" content="zsh" />
+<meta property="og:description" content="安装oh-my-zsh sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot; 安装插件 进入oh-my-zsh插件库中 cd ~/.oh-my-zsh/custom/plugins/ 下载插件（自动补全为例） git clone git://github.com/zsh-users/zsh-autosuggestions 其实插件名就是仓库名（zsh-aut" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://bufferflies.github.io/post/zsh-%E5%AE%89%E8%A3%85/" />
+
+<meta itemprop="name" content="zsh">
+<meta itemprop="description" content="安装oh-my-zsh sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot; 安装插件 进入oh-my-zsh插件库中 cd ~/.oh-my-zsh/custom/plugins/ 下载插件（自动补全为例） git clone git://github.com/zsh-users/zsh-autosuggestions 其实插件名就是仓库名（zsh-aut">
+
+<meta itemprop="wordCount" content="199">
+
+
+
+<meta itemprop="keywords" content="tools," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="webflux"/>
-<meta name="twitter:description" content="blog for bufferflies"/>
+<meta name="twitter:title" content="zsh"/>
+<meta name="twitter:description" content="安装oh-my-zsh sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot; 安装插件 进入oh-my-zsh插件库中 cd ~/.oh-my-zsh/custom/plugins/ 下载插件（自动补全为例） git clone git://github.com/zsh-users/zsh-autosuggestions 其实插件名就是仓库名（zsh-aut"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -324,66 +331,159 @@
     <main id="main" class="main bg-llight">
       <div class="content-wrapper">
         <div id="content" class="content container">
-          
-
-<section id="archive" class="archive">
-  
+          <article class="post bg-white">
     
-      <div class="archive-title category">
-        <h2 class="archive-name">webflux</h2>
+    <header class="post-header">
+      <h1 class="post-title">zsh</h1>
+      
+      <div class="post-meta">
+        <time datetime="0001-01-01" class="post-time">
+          0001-01-01
+        </time>
+        <div class="post-category">
+            <a href="https://bufferflies.github.io/categories/shell/"> shell </a>
+            
+          </div>
+        
+
+        
+        
+
+        
+        
       </div>
+    </header>
+
     
-  
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title"></h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#安装oh-my-zsh">安装oh-my-zsh</a></li>
+    <li><a href="#安装插件">安装插件</a></li>
+    <li><a href="#安装fzf">安装fzf</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
 
-  
-    <div class="archive-post">
-      <time datetime="2020-11-04" class="archive-post-time">
-        2020-11-04
-      </time>
-      <span class="archive-post-title">
-        <a href="/post/webflux%E8%A7%A3%E6%9E%902/" class="archive-post-link">
-          webflux源码设计2
-        </a>
-      </span>
+    
+    <div class="post-content">
+      <h2 id="安装oh-my-zsh">安装oh-my-zsh</h2>
+<pre><code>sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;
+</code></pre><h2 id="安装插件">安装插件</h2>
+<ol>
+<li>
+<p>进入oh-my-zsh插件库中</p>
+<pre><code>cd ~/.oh-my-zsh/custom/plugins/
+</code></pre></li>
+<li>
+<p>下载插件（自动补全为例）</p>
+<pre><code>git clone git://github.com/zsh-users/zsh-autosuggestions
+</code></pre><p>其实插件名就是仓库名（zsh-autosuggestions）</p>
+</li>
+<li>
+<p>插件生效
+vim ~/.zshrc
+找到plugin配置，添加如下：</p>
+<pre><code>plugins=(
+    git
+    zsh-autosuggestions
+)
+</code></pre></li>
+<li>
+<p>生效.zshrc 文件
+source ~/.zsh</p>
+</li>
+</ol>
+<h2 id="安装fzf">安装fzf</h2>
+<p>支持历史命令查看
+<a href="https://www.jianshu.com/p/74ff1e637b2c">https://www.jianshu.com/p/74ff1e637b2c</a></p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://www.jianshu.com/p/b6af829ec2dc">安装oh-my-zsh</a></li>
+<li><a href="https://blog.csdn.net/xfxf0520/article/details/84589446">插件安装</a></li>
+<li><a href="https://learnku.com/tensorflow/t/5790/ultimate-terminal-zshautojump">autojumo</a> 记录cd去过的路径 后面可以直接通过 j 文件夹进行跳转</li>
+<li><a href="https://juejin.im/post/5d905a886fb9a04e3902d7a9">fzf</a> 记录历史命令，非常直观显示最近使用的命令</li>
+</ul>
+
     </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title"></span>
+    <span class="item-content">bufferflies</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title"></span>
+    <span class="item-content">
+      0001-01-01
+      
+    </span>
+  </p>
   
-    <div class="archive-post">
-      <time datetime="2020-11-04" class="archive-post-time">
-        2020-11-04
-      </time>
-      <span class="archive-post-title">
-        <a href="/post/webflux%E8%A7%A3%E6%9E%901/" class="archive-post-link">
-          webflux源码设计1
-        </a>
-      </span>
-    </div>
+  <p class="copyright-item">
+    <span class="item-title"></span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://bufferflies.github.io/tags/tools/">tools</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/webflux%E8%A7%A3%E6%9E%902/">
+            
+            <i class="iconfont">
+              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
+</svg>
+
+            </i>
+            <span class="prev-text nav-default">webflux源码设计2</span>
+            <span class="prev-text nav-mobile"></span>
+          </a>
+        
+      </nav>
+    </footer>
+  </article>
+
   
-</section>
-
-
-
-
-
-
-  
-  
   
 
   
   
 
   
-  
 
   
   
 
   
+
   
 
+  
 
+    
 
-
+  
 
         </div>
       </div>
@@ -480,7 +580,29 @@
 
 
 
+<script src="https://cdn.jsdelivr.net/gh/jmnote/plantuml-encoder@1.2.4/dist/plantuml-encoder.min.js" integrity="sha256-Qsk2KRBCN5qVZX7B+8+2IvQl1Aqc723qV1tBCQaVoqo=" crossorigin="anonymous"></script>
+<script>
+(function(){
+  let plantumlPrefix = "language-plantuml";
+  Array.prototype.forEach.call(document.querySelectorAll("[class^=" + plantumlPrefix + "]"), function(code){
+    let image = document.createElement("IMG");
+    image.loading = 'lazy'; 
+    image.src = 'http://www.plantuml.com/plantuml/svg/~1' + plantumlEncoder.encode(code.innerText);
+    code.parentNode.insertBefore(image, code);
+    code.style.display = 'none';
+  });
+})();
+</script>
 
+
+
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
 
 
