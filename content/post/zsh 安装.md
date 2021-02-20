@@ -1,6 +1,6 @@
 ---
 author: "bufferflies"
-date: 2021-2-20
+date: 2021-02-20
 title: "zsh"
 tags: [
     "tools",
