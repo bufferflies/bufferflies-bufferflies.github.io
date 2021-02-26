@@ -25,10 +25,10 @@
     
     <item>
       <title>API 网关设计</title>
-      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</link>
+      <link>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</guid>
+      <guid>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</guid>
       
         <description>&lt;h1 id=&#34;网关评审&#34;&gt;网关评审&lt;/h1&gt;
 &lt;h2 id=&#34;需求&#34;&gt;需求&lt;/h2&gt;
@@ -168,10 +168,10 @@ http——proxy 提供http代理&lt;/p&gt;
     
     <item>
       <title>API 网关设计 OAuth2</title>
-      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</link>
+      <link>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</guid>
+      <guid>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</guid>
       
         <description>&lt;h1 id=&#34;领域模型&#34;&gt;领域模型&lt;/h1&gt;
 &lt;p&gt;核心功能：为网关提供用户认证服务
@@ -299,10 +299,10 @@ U -&amp;gt;U : set cookie and redirect
     
     <item>
       <title>API 网关设计 插件编写</title>
-      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</link>
+      <link>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</guid>
+      <guid>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</guid>
       
         <description>&lt;h1 id=&#34;trpchttp-gateway&#34;&gt;trpc/http-gateway&lt;/h1&gt;
 &lt;p&gt;需求：对外提供HTTP的转发功能
@@ -689,6 +689,151 @@ W --&amp;gt; R: render
     </item>
     
     <item>
+      <title>Spirng Cloud 过滤器</title>
+      <link>https://bufferflies.github.io/post/gateway/spring-cloud-%E8%BF%87%E6%BB%A4%E5%99%A8/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/gateway/spring-cloud-%E8%BF%87%E6%BB%A4%E5%99%A8/</guid>
+      
+        <description>&lt;h1 id=&#34;网关&#34;&gt;网关&lt;/h1&gt;
+&lt;h2 id=&#34;通用过滤器&#34;&gt;通用过滤器&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;过滤器&lt;/th&gt;
+&lt;th&gt;作用&lt;/th&gt;
+&lt;th&gt;描述&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;RemoveCachedBodyFilter&lt;/td&gt;
+&lt;td&gt;处理缓存&lt;/td&gt;
+&lt;td&gt;MIN_LEVEL&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;AdaptCachedBodyGlobalFilter&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;MIN_LEVEL+1000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NettyWriteResponseFilter&lt;/td&gt;
+&lt;td&gt;返回response body&lt;/td&gt;
+&lt;td&gt;-1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ForwardPathFilter&lt;/td&gt;
+&lt;td&gt;处理uri为&amp;quot;forward&amp;quot;请求&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;RouteToRequesrUrlFilter&lt;/td&gt;
+&lt;td&gt;处理URI 替换原有的Request的URI&lt;/td&gt;
+&lt;td&gt;10000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NoLoadBalancerClientFilter&lt;/td&gt;
+&lt;td&gt;判断URL中不含有lb前缀&lt;/td&gt;
+&lt;td&gt;10100&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;WebsocketRoutingFilter&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;MAX_LEVEL-1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NettyRoutingFilter&lt;/td&gt;
+&lt;td&gt;开始请求&lt;/td&gt;
+&lt;td&gt;MAX_LEVEL&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ForwarRoutingFIlter&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;MAX_LEVEL&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>spring 源码解析--mvc 处理流程</title>
+      <link>https://bufferflies.github.io/post/spring-webmvc-%E6%BA%90%E7%A0%81/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/spring-webmvc-%E6%BA%90%E7%A0%81/</guid>
+      
+        <description>&lt;h1 id=&#34;spring-源码解析--mvc-处理流程&#34;&gt;spring 源码解析&amp;ndash;mvc 处理流程&lt;/h1&gt;
+&lt;p&gt;客户端发出HTTP请求，框架找到并执行对应的方法，最后将执行的结果进行返回&lt;/p&gt;
+&lt;p&gt;简单的版本预设条件：
+1.不用实现过滤器，
+2.只允许Ajax请求&lt;/p&gt;
+&lt;h2 id=&#34;架构&#34;&gt;架构&lt;/h2&gt;
+&lt;p&gt;关系&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;component request
+frame UrlMapping{
+   storage SimpleUrlHandlerMapping  
+} 
+
+frame ControllerAdapter{
+    storage HandleAdapter
+}
+frame ResultHandler{
+  storage ModelView
+}
+request -&amp;gt;UrlMapping
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;UrlMapping：根据request的请求找到执行器chain
+ControllerAdapter: 执行器的适配器
+ResultHandler：处理执行器的结果
+类图&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt; class HandlerExecutionChain{
+   Object handler: Controller 也就是我们自己的写的controller
+   List&amp;lt;HandlerInterceptor&amp;gt; interceptorList: 拦截器列表
+   int interceptorIndex： 拦截器执行的索引
+   applyPreHandle(request，response):boolean 执行前置拦截器
+   applyPostHandler(request, response): boolean 执行后置拦截器 
+ }
+ class HandlerAdapter{
+    supports():boolean 给定一个handler 判断其是否可以处理
+    handler(request,response，handler):ModelView 执行方法
+    getLastModified(request, handler): long
+ }
+ 
+ class HandlerInterceptor{
+   preHandler(request,response，handler):boolean
+   postHandler(request,response，handler):boolean
+   afterCompletion(request,response，handler):boolean after rendering the view
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;HandlerExecutionChain 执行器
+HandlerAdapte  handler的适配器 对controller进行管控
+HandlerInterceptor 拦截器父类&lt;/p&gt;
+&lt;p&gt;时序图&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;    actor User as U
+    boundary WebContainer as C
+    control DispatcherServlet as D
+    control HandlerExecutionChain as E
+    control HandlerAdapter as A
+    control HandlerIntercepter as I
+    
+    U-&amp;gt;C: send request
+    C-&amp;gt;D: doService
+    D-&amp;gt; E: getHandler(request)
+    E--&amp;gt;D: return chain
+    D-&amp;gt;A: getHandlerAdapter(chain)
+    A--&amp;gt;D: return HandlerAdapter
+    D-&amp;gt; D: HandlerExecutionChain.applyPreHandler \n 开始执行前置拦截器
+    D-&amp;gt; D: HandlerAdapter.handler mv \n 开始执行Controller中的方法
+    D-&amp;gt; D: applyDefaultViewName(request, mv) \n 返回默认的视图
+    D-&amp;gt; D: applyPostHandler(result, response, mv) \n 执行后置拦截器 
+    D-&amp;gt;D: processDispatchResult \n (request, response, mappedHandler, mv, dispatchException)\n 处理返回的结果
+    D-&amp;gt;D: applyAfterConcurrentHandlingStarted(request, response) \n 执行拦截器的completion方法
+    
+&lt;/code&gt;&lt;/pre&gt;</description>
+      
+    </item>
+    
+    <item>
       <title>一次OkHTTP3 网络排查</title>
       <link>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
@@ -750,6 +895,231 @@ Tomcat -&amp;gt; Control
     </item>
     
     <item>
+      <title>日志收集</title>
+      <link>https://bufferflies.github.io/post/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E5%88%86%E6%9E%90/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E5%88%86%E6%9E%90/</guid>
+      
+        <description>&lt;h1 id=&#34;日志收集&#34;&gt;日志收集&lt;/h1&gt;
+&lt;h2 id=&#34;日志现状小时级别&#34;&gt;日志现状（小时级别）&lt;/h2&gt;
+&lt;p&gt;每个服务大约都是百兆级别&lt;/p&gt;
+&lt;h2 id=&#34;日志方案主要在采集与聚合的差别&#34;&gt;日志方案（主要在采集与聚合的差别）&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;node node{
+   storage Agent
+}
+storage MQ
+storage Collector
+storage Storage
+storage Visualization
+Agent -&amp;gt; MQ: buffering
+MQ -&amp;gt; Collector: filtering and aggregate
+Collector -&amp;gt; Storage: index and store
+Storage-&amp;gt; Visualization: analysis and visualization
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;ELK（&lt;a href=&#34;https://www.elastic.co/cn/&#34;&gt;logstash&lt;/a&gt;）
+filebeats ：采集日志，简单进行格式转换，相对于logstash速度更快，资源消耗更小
+logstash： 一个java进程，资源消耗较大，具有丰富的过滤功能（特别吃内存 ）
+es： 存储
+kibana：可视化与分析
+MQ：消息中间件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;node node
+storage filebeats
+storage logstash
+storage MQ
+storage es
+storage kibana
+node-&amp;gt; filebeats: collection 
+filebeats-&amp;gt;MQ: buffering
+MQ-&amp;gt; logstash: aggregate and filtering
+logstash -&amp;gt; es: index and store
+es -&amp;gt; kibana: analysis and visualization
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;EFK（&lt;a href=&#34;http://fluentbit.org/&#34;&gt;Fluent&lt;/a&gt;）
+F：Fluentd（Apache 2.0） 相对于ELK 取代重量级别的，c语言开发，官方文档描述30～40M的内存能够1300日志事件/秒/核
+F：Fluent bit 更加轻量级 资源消耗小 过滤处理能力较弱 适合于小型日志收集&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;logstail（&lt;a href=&#34;https://help.aliyun.com/document_detail/28981.html?spm=a2c4g.11174283.6.588.2a751caa7ZCPEh&#34;&gt;阿里云&lt;/a&gt;）
+占用机器cpu、内存资源最少，结合阿里云日志服务的E2E体验良好，但目前对特定日志类型解析的支持较弱&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;日志收集场景对比&#34;&gt;日志收集场景对比&lt;/h2&gt;
+&lt;h3 id=&#34;功能对比&#34;&gt;功能对比&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://bufferflies.github.io/log/p1.jpg&#34; alt=&#34;-w877&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;性能对比&#34;&gt;性能对比&lt;/h3&gt;
+&lt;p&gt;前提： 以Nginx的access log为样例，如下一条日志365字节，结构化成14个字段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;logstash
+&lt;img src=&#34;https://bufferflies.github.io/log/p2.jpg&#34; alt=&#34;-w877&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;fluentd
+&lt;img src=&#34;https://bufferflies.github.io/log/p3.jpg&#34; alt=&#34;-w872&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;logtail
+&lt;img src=&#34;https://bufferflies.github.io/log/p4.jpg&#34; alt=&#34;-w890&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>通信杂谈</title>
+      <link>https://bufferflies.github.io/post/%E9%80%9A%E4%BF%A1%E6%9D%82%E8%B0%88/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/%E9%80%9A%E4%BF%A1%E6%9D%82%E8%B0%88/</guid>
+      
+        <description>&lt;h1 id=&#34;通信杂谈&#34;&gt;通信杂谈&lt;/h1&gt;
+&lt;p&gt;以下情形不进行考虑：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数据传输的可靠性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;初代&#34;&gt;初代：&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;interface sender
+queue transfer
+interface handler
+
+sender-&amp;gt;transfer
+transfer-&amp;gt;handler 
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;sender发送二进制流&lt;/li&gt;
+&lt;li&gt;handler 接收二进制流并进行处理&lt;/li&gt;
+&lt;li&gt;transfer 传输介质&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;最早发现的问题：发送者和传输者都需要负责转换二进制流（语言不通）&lt;/p&gt;
+&lt;h2 id=&#34;二代单核通信解决通信语言问题&#34;&gt;二代（单核通信，解决通信语言问题）&lt;/h2&gt;
+&lt;p&gt;使用同一套通讯协议&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;interface sender
+control encoder
+queue transfer
+control decoder
+interface handler
+
+sender -&amp;gt; encoder
+encoder-&amp;gt;transfer
+transfer-&amp;gt;decoder
+decoder-&amp;gt;handler 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;encoder: 对发送者进行转码 使其发出去的流符合相应的格式
+decoder：对发过来的流进行解析 翻译报文&lt;/p&gt;
+&lt;p&gt;优点： 开发人员不用再去关系二进制流转换问题，专注于处理业务逻辑，
+最严重的问题：在这种模式下，一个receiver同一时刻只能处理一个sender&lt;/p&gt;
+&lt;h2 id=&#34;三代&#34;&gt;三代&lt;/h2&gt;
+&lt;p&gt;为了提供更为强大的处理能力，决定部署更多的接收器&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;interface sender
+control encoder
+queue transfer
+
+node dispatcher
+node server1{
+    storage handler1
+    storage encode1
+    
+    encode1 -&amp;gt; handler1
+}
+node server2{
+    storage handler2
+    storage encode2
+    encode2 -&amp;gt; handler2
+}
+
+sender -&amp;gt; encoder
+encoder-&amp;gt;transfer
+transfer-&amp;gt;dispatcher
+dispatcher-(0)-&amp;gt;server1
+dispatcher-(0)-&amp;gt;server2
+
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;四代多核&#34;&gt;四代（多核）&lt;/h2&gt;
+&lt;p&gt;一个服务上可以处理多个进程&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;interface sender
+control encoder
+queue transfer
+
+storage server{
+    node dispatcher
+    
+    node processor1{
+        storage encode1
+        storage handler1
+        encode1 -&amp;gt; handler1  
+    }
+    node processor2{
+        storage encode2
+        storage handler2
+        encode2 -&amp;gt; handler2
+    }
+    
+    dispatcher-0-&amp;gt;processor1:handler
+    dispatcher-0-&amp;gt;processor2:handler
+    
+}
+
+sender -&amp;gt; encoder: send 
+encoder -&amp;gt; transfer: transfer
+transfer --&amp;gt; dispatcher: resolve
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;时序图&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;actor User as U
+boundary Browser as B
+boundary Dispatcher as D
+boundary Codec as C
+control Processor as P
+
+U -&amp;gt; B: send request \n input https://api.weiling.qq.com/doc/
+B -&amp;gt; D: encode HTTP Request \n GET /doc HTTP/1.1
+D -&amp;gt; C: select usable Processor
+C -&amp;gt; P: decode byte[] to ServerWebRequest
+P --&amp;gt; C: handler ServerWebRequest \n and return  ServerWebResponse
+C --&amp;gt; D: encode ServerWebResponse \n HTTP\1.1 200 OK 
+D --&amp;gt; B: write stream to response
+B --&amp;gt; U: render
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;类图&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;interface Dispatcher(){
+    dispatcher(Socket socket): void
+}
+
+interface Codec{
+    encode(byte[] bytes): ServerWebRequest
+    decode(ServerWebResponse response): byte[]
+} 
+interface Processor{
+    handler(ServerWebRequest request): ServerWebResponse
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>高并发指标</title>
+      <link>https://bufferflies.github.io/post/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/</guid>
+      
+        <description>&lt;h1 id=&#34;高并发指标&#34;&gt;高并发指标&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;RT 响应时间&lt;/li&gt;
+&lt;li&gt;throughput： 吞吐量&lt;/li&gt;
+&lt;li&gt;QPS：question per second 每秒的请求数量&lt;/li&gt;
+&lt;li&gt;并发用户数&lt;/li&gt;
+&lt;li&gt;PV：page view 页面被浏览的次数(点击量)&lt;/li&gt;
+&lt;li&gt;TPS：Transactions Per Second 每秒的事务数&lt;/li&gt;
+&lt;li&gt;RPS：Responses Per Second 每秒处理响应数 并发数/平均响应时间&lt;/li&gt;
+&lt;li&gt;QPS: Query Per Second 每秒可以处理的请求数&lt;/li&gt;
+&lt;li&gt;TP90: 超过90%的请求处理时间&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>zsh</title>
       <link>https://bufferflies.github.io/post/zsh-%E5%AE%89%E8%A3%85/</link>
       <pubDate>Sat, 20 Feb 2021 00:00:00 +0000</pubDate>
@@ -793,19 +1163,6 @@ source ~/.zsh&lt;/p&gt;
 &lt;li&gt;&lt;a href=&#34;https://learnku.com/tensorflow/t/5790/ultimate-terminal-zshautojump&#34;&gt;autojumo&lt;/a&gt; 记录cd去过的路径 后面可以直接通过 j 文件夹进行跳转&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://juejin.im/post/5d905a886fb9a04e3902d7a9&#34;&gt;fzf&lt;/a&gt; 记录历史命令，非常直观显示最近使用的命令&lt;/li&gt;
 &lt;/ul&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>网络基础</title>
-      <link>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C/</link>
-      <pubDate>Thu, 05 Nov 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C/</guid>
-      
-        <description>&lt;h1 id=&#34;网络基础协议&#34;&gt;网络基础协议&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://bufferflies.github.io/pachong.png&#34; alt=&#34;test&#34;&gt;&lt;/p&gt;
 </description>
       
     </item>

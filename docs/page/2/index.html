@@ -336,12 +336,12 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/post/%E7%BD%91%E7%BB%9C/">网络基础</a>
+      <a class="post-link" href="/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/">一次OkHTTP3 网络排查</a>
     </h1>
     
     <div class="post-meta">
-      <time datetime="2020-11-05" class="post-time">
-        2020-11-05
+      <time datetime="2021-02-26" class="post-time">
+        2021-02-26
       </time>
       <div class="post-category">
           <a href="https://bufferflies.github.io/categories/net/"> net </a>
@@ -356,10 +356,10 @@
   <div class="post-content">
     
     <div class="post-summary">
-      网络基础协议
+      记一次http pipeline异常 背景 服务依赖关系 storage Client{ storage OkHttp storage Netty } storage Server{ storage Control storage Tomcat } OkHttp-&gt;Netty Netty.&gt;Tomcat Tomcat -&gt; Control 现象 每天偶现5次左右API调用返回400现象, 查询S
     </div>
     <div class="read-more">
-      <a href="/post/%E7%BD%91%E7%BB%9C/" class="read-more-link"></a>
+      <a href="/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/" class="read-more-link"></a>
     </div>
     
   </div>
@@ -370,15 +370,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/post/webflux%E8%A7%A3%E6%9E%901/">webflux源码设计1</a>
+      <a class="post-link" href="/post/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E5%88%86%E6%9E%90/">日志收集</a>
     </h1>
     
     <div class="post-meta">
-      <time datetime="2020-11-04" class="post-time">
-        2020-11-04
+      <time datetime="2021-02-26" class="post-time">
+        2021-02-26
       </time>
       <div class="post-category">
-          <a href="https://bufferflies.github.io/categories/webflux/"> webflux </a>
+          <a href="https://bufferflies.github.io/categories/system-design/"> system design </a>
           
         </div>
       
@@ -390,10 +390,10 @@
   <div class="post-content">
     
     <div class="post-summary">
-      Spring5 WebFlux 源码解析（一） 场景： 能够将请求适配到指定方法，调用方法并返回 领域图 storage Request as W storage HandlerMapping as M storage HandlerAdapter as A storage HandlerResultHandler as R entity Result as E control Handler as C W -&gt; M: trigger M -&gt; C: find E -&gt; R:
+      日志收集 日志现状（小时级别） 每个服务大约都是百兆级别 日志方案（主要在采集与聚合的差别） node node{ storage Agent } storage MQ storage Collector storage Storage storage Visualization Agent -&gt; MQ: buffering MQ -&gt; Collector: filtering and aggregate Collector -&gt; Storage: index
     </div>
     <div class="read-more">
-      <a href="/post/webflux%E8%A7%A3%E6%9E%901/" class="read-more-link"></a>
+      <a href="/post/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E5%88%86%E6%9E%90/" class="read-more-link"></a>
     </div>
     
   </div>
@@ -404,15 +404,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/post/webflux%E8%A7%A3%E6%9E%902/">webflux源码设计2</a>
+      <a class="post-link" href="/post/%E9%80%9A%E4%BF%A1%E6%9D%82%E8%B0%88/">通信杂谈</a>
     </h1>
     
     <div class="post-meta">
-      <time datetime="2020-11-04" class="post-time">
-        2020-11-04
+      <time datetime="2021-02-26" class="post-time">
+        2021-02-26
       </time>
       <div class="post-category">
-          <a href="https://bufferflies.github.io/categories/webflux/"> webflux </a>
+          <a href="https://bufferflies.github.io/categories/net/"> net </a>
           
         </div>
       
@@ -424,10 +424,78 @@
   <div class="post-content">
     
     <div class="post-summary">
-      核心类图 class RouterFunction { RouteFunction routeFunction; 路由执行器 List&lt;HttpMessageReader&lt;?&gt;&gt; messageReaders; request阅读器 getHandlerInternal(ServerWebExchange ex): HandlerFunction 获取对应的执行器 } class HandlerFunctionAdapter { supports(Object handler): boolean 只支持HandlerFunction 的函数 handler(ServerWebExchange ex,Object handler): HandlerResult 执
+      通信杂谈 以下情形不进行考虑： 数据传输的可靠性 初代： interface sender queue transfer interface handler sender-&gt;transfer transfer-&gt;handler sender发送二进制流 handler 接收二进制流并进行处理 transfer 传输介质 最早发现的问题：
     </div>
     <div class="read-more">
-      <a href="/post/webflux%E8%A7%A3%E6%9E%902/" class="read-more-link"></a>
+      <a href="/post/%E9%80%9A%E4%BF%A1%E6%9D%82%E8%B0%88/" class="read-more-link"></a>
+    </div>
+    
+  </div>
+</article>
+
+  
+    <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      <a class="post-link" href="/post/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/">高并发指标</a>
+    </h1>
+    
+    <div class="post-meta">
+      <time datetime="2021-02-26" class="post-time">
+        2021-02-26
+      </time>
+      <div class="post-category">
+          <a href="https://bufferflies.github.io/categories/system-design/"> system design </a>
+          
+        </div>
+      
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      高并发指标 RT 响应时间 throughput： 吞吐量 QPS：question per second 每秒的请求数量 并发用户数 PV：page view 页面被浏览的次数(点击量
+    </div>
+    <div class="read-more">
+      <a href="/post/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/" class="read-more-link"></a>
+    </div>
+    
+  </div>
+</article>
+
+  
+    <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      <a class="post-link" href="/post/zsh-%E5%AE%89%E8%A3%85/">zsh</a>
+    </h1>
+    
+    <div class="post-meta">
+      <time datetime="2021-02-20" class="post-time">
+        2021-02-20
+      </time>
+      <div class="post-category">
+          <a href="https://bufferflies.github.io/categories/shell/"> shell </a>
+          
+        </div>
+      
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      安装oh-my-zsh sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot; 安装插件 进入oh-my-zsh插件库中 cd ~/.oh-my-zsh/custom/plugins/ 下载插件（自动补全为例） git clone git://github.com/zsh-users/zsh-autosuggestions 其实插件名就是仓库名（zsh-aut
+    </div>
+    <div class="read-more">
+      <a href="/post/zsh-%E5%AE%89%E8%A3%85/" class="read-more-link"></a>
     </div>
     
   </div>
@@ -465,6 +533,10 @@
       
       <li  class="active" >
         <a href="/page/2/">2</a>
+      </li>
+      
+      <li >
+        <a href="/page/3/">3</a>
       </li>
       
     </ul>

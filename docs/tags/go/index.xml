@@ -10,28 +10,28 @@
     <lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>API 网关设计</title>
-      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</link>
+      <link>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</guid>
+      <guid>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</guid>
       <description>网关评审 需求 需要的能力： 路由 协议转换 服务发现 mertices监控 路由动态更新 支持OAuth2，LDAP身份认证 熔断 重试 流量控制 负载均衡 场景一</description>
     </item>
     
     <item>
       <title>API 网关设计 OAuth2</title>
-      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</link>
+      <link>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</guid>
+      <guid>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</guid>
       <description>领域模型 核心功能：为网关提供用户认证服务 提供的功能： 能够接入支持OAuth2的认证服务 用户登陆成功后可以跳转到之前访问的页面 领域图 storage request storage proxy storage</description>
     </item>
     
     <item>
       <title>API 网关设计 插件编写</title>
-      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</link>
+      <link>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</guid>
+      <guid>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</guid>
       <description>trpc/http-gateway 需求：对外提供HTTP的转发功能 特性： 支持自定义的Filter和Predicate 兼容spring cloud gateway的配置 网关设计 storage predicate { storage PredicateFactory</description>
     </item>
     

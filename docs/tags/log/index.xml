@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>log on blog for bufferflies</title>
+    <link>https://bufferflies.github.io/tags/log/</link>
+    <description>Recent content in log on blog for bufferflies</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>bufferflies</copyright>
+    <lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/tags/log/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>日志收集</title>
+      <link>https://bufferflies.github.io/post/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E5%88%86%E6%9E%90/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E5%88%86%E6%9E%90/</guid>
+      <description>日志收集 日志现状（小时级别） 每个服务大约都是百兆级别 日志方案（主要在采集与聚合的差别） node node{ storage Agent } storage MQ storage Collector storage Storage storage Visualization Agent -&amp;gt; MQ: buffering MQ -&amp;gt; Collector: filtering and aggregate Collector -&amp;gt; Storage: index</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>spring on blog for bufferflies</title>
+    <link>https://bufferflies.github.io/categories/spring/</link>
+    <description>Recent content in spring on blog for bufferflies</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>bufferflies</copyright>
+    <lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/categories/spring/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>spring 源码解析--mvc 处理流程</title>
+      <link>https://bufferflies.github.io/post/spring-webmvc-%E6%BA%90%E7%A0%81/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/spring-webmvc-%E6%BA%90%E7%A0%81/</guid>
+      <description>spring 源码解析&amp;ndash;mvc 处理流程 客户端发出HTTP请求，框架找到并执行对应的方法，最后将执行的结果进行返回 简单的版本预设条件： 1.不用</description>
+    </item>
+    
+    <item>
+      <title>webflux源码设计1</title>
+      <link>https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%901/</link>
+      <pubDate>Wed, 04 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%901/</guid>
+      <description>Spring5 WebFlux 源码解析（一） 场景： 能够将请求适配到指定方法，调用方法并返回 领域图 storage Request as W storage HandlerMapping as M storage HandlerAdapter as A storage HandlerResultHandler as R entity Result as E control Handler as C W -&amp;gt; M: trigger M -&amp;gt; C: find E -&amp;gt; R:</description>
+    </item>
+    
+    <item>
+      <title>webflux源码设计2</title>
+      <link>https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%902/</link>
+      <pubDate>Wed, 04 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/webflux%E8%A7%A3%E6%9E%902/</guid>
+      <description>核心类图 class RouterFunction { RouteFunction routeFunction; 路由执行器 List&amp;lt;HttpMessageReader&amp;lt;?&amp;gt;&amp;gt; messageReaders; request阅读器 getHandlerInternal(ServerWebExchange ex): HandlerFunction 获取对应的执行器 } class HandlerFunctionAdapter { supports(Object handler): boolean 只支持HandlerFunction 的函数 handler(ServerWebExchange ex,Object handler): HandlerResult 执</description>
+    </item>
+    
+  </channel>
+</rss>

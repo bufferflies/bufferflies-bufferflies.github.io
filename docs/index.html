@@ -336,7 +336,7 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/">API 网关设计</a>
+      <a class="post-link" href="/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/">API 网关设计</a>
     </h1>
     
     <div class="post-meta">
@@ -359,7 +359,7 @@
       网关评审 需求 需要的能力： 路由 协议转换 服务发现 mertices监控 路由动态更新 支持OAuth2，LDAP身份认证 熔断 重试 流量控制 负载均衡 场景一
     </div>
     <div class="read-more">
-      <a href="/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/" class="read-more-link"></a>
+      <a href="/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/" class="read-more-link"></a>
     </div>
     
   </div>
@@ -370,7 +370,7 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/post/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/">API 网关设计 OAuth2</a>
+      <a class="post-link" href="/post/gateway/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/">API 网关设计 OAuth2</a>
     </h1>
     
     <div class="post-meta">
@@ -393,7 +393,7 @@
       领域模型 核心功能：为网关提供用户认证服务 提供的功能： 能够接入支持OAuth2的认证服务 用户登陆成功后可以跳转到之前访问的页面 领域图 storage request storage proxy storage
     </div>
     <div class="read-more">
-      <a href="/post/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/" class="read-more-link"></a>
+      <a href="/post/gateway/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/" class="read-more-link"></a>
     </div>
     
   </div>
@@ -404,7 +404,7 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/">API 网关设计 插件编写</a>
+      <a class="post-link" href="/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/">API 网关设计 插件编写</a>
     </h1>
     
     <div class="post-meta">
@@ -427,7 +427,7 @@
       trpc/http-gateway 需求：对外提供HTTP的转发功能 特性： 支持自定义的Filter和Predicate 兼容spring cloud gateway的配置 网关设计 storage predicate { storage PredicateFactory
     </div>
     <div class="read-more">
-      <a href="/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/" class="read-more-link"></a>
+      <a href="/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/" class="read-more-link"></a>
     </div>
     
   </div>
@@ -438,7 +438,7 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/">一次OkHTTP3 网络排查</a>
+      <a class="post-link" href="/post/gateway/spring-cloud-%E8%BF%87%E6%BB%A4%E5%99%A8/">Spirng Cloud 过滤器</a>
     </h1>
     
     <div class="post-meta">
@@ -446,7 +446,7 @@
         2021-02-26
       </time>
       <div class="post-category">
-          <a href="https://bufferflies.github.io/categories/net/"> net </a>
+          <a href="https://bufferflies.github.io/categories/gateway/"> gateway </a>
           
         </div>
       
@@ -458,10 +458,10 @@
   <div class="post-content">
     
     <div class="post-summary">
-      记一次http pipeline异常 背景 服务依赖关系 storage Client{ storage OkHttp storage Netty } storage Server{ storage Control storage Tomcat } OkHttp-&gt;Netty Netty.&gt;Tomcat Tomcat -&gt; Control 现象 每天偶现5次左右API调用返回400现象, 查询S
+      网关 通用过滤器 过滤器 作用 描述 RemoveCachedBodyFilter 处理缓存 MIN_LEVEL AdaptCachedBodyGlobalFilter MIN_LEVEL+1000 NettyWriteResponseFilter 返回response body -1 ForwardPathFilter 处理uri为&quot;forward&quot;请求 0 RouteToRequesrUrlFilter 处理URI
     </div>
     <div class="read-more">
-      <a href="/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/" class="read-more-link"></a>
+      <a href="/post/gateway/spring-cloud-%E8%BF%87%E6%BB%A4%E5%99%A8/" class="read-more-link"></a>
     </div>
     
   </div>
@@ -472,15 +472,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/post/zsh-%E5%AE%89%E8%A3%85/">zsh</a>
+      <a class="post-link" href="/post/spring-webmvc-%E6%BA%90%E7%A0%81/">spring 源码解析--mvc 处理流程</a>
     </h1>
     
     <div class="post-meta">
-      <time datetime="2021-02-20" class="post-time">
-        2021-02-20
+      <time datetime="2021-02-26" class="post-time">
+        2021-02-26
       </time>
       <div class="post-category">
-          <a href="https://bufferflies.github.io/categories/shell/"> shell </a>
+          <a href="https://bufferflies.github.io/categories/spring/"> spring </a>
           
         </div>
       
@@ -492,10 +492,10 @@
   <div class="post-content">
     
     <div class="post-summary">
-      安装oh-my-zsh sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot; 安装插件 进入oh-my-zsh插件库中 cd ~/.oh-my-zsh/custom/plugins/ 下载插件（自动补全为例） git clone git://github.com/zsh-users/zsh-autosuggestions 其实插件名就是仓库名（zsh-aut
+      spring 源码解析&ndash;mvc 处理流程 客户端发出HTTP请求，框架找到并执行对应的方法，最后将执行的结果进行返回 简单的版本预设条件： 1.不用
     </div>
     <div class="read-more">
-      <a href="/post/zsh-%E5%AE%89%E8%A3%85/" class="read-more-link"></a>
+      <a href="/post/spring-webmvc-%E6%BA%90%E7%A0%81/" class="read-more-link"></a>
     </div>
     
   </div>
@@ -533,6 +533,10 @@
       
       <li >
         <a href="/page/2/">2</a>
+      </li>
+      
+      <li >
+        <a href="/page/3/">3</a>
       </li>
       
     </ul>

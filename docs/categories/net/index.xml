@@ -18,12 +18,12 @@
     </item>
     
     <item>
-      <title>网络基础</title>
-      <link>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C/</link>
-      <pubDate>Thu, 05 Nov 2020 00:00:00 +0000</pubDate>
+      <title>通信杂谈</title>
+      <link>https://bufferflies.github.io/post/%E9%80%9A%E4%BF%A1%E6%9D%82%E8%B0%88/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C/</guid>
-      <description>网络基础协议</description>
+      <guid>https://bufferflies.github.io/post/%E9%80%9A%E4%BF%A1%E6%9D%82%E8%B0%88/</guid>
+      <description>通信杂谈 以下情形不进行考虑： 数据传输的可靠性 初代： interface sender queue transfer interface handler sender-&amp;gt;transfer transfer-&amp;gt;handler sender发送二进制流 handler 接收二进制流并进行处理 transfer 传输介质 最早发现的问题：</description>
     </item>
     
   </channel>

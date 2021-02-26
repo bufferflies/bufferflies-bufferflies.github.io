@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>API 网关设计 插件编写 - blog for bufferflies</title>
+  
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="bufferflies" />
+  <meta name="description" content="trpc/http-gateway 需求：对外提供HTTP的转发功能 特性： 支持自定义的Filter和Predicate 兼容spring cloud gateway的配置 网关设计 storage predicate { storage PredicateFactory" />
+
+  <meta name="keywords" content="Bufferflies, IT, " />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+
+<link rel="canonical" href="https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/" />
+
+
+
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/sass/jane.min.f1e506a781bf25d33ffc18aa6b4e972a965c58049d27d4f92b7db2e9bf28e4bf.css" integrity="sha256-8eUGp4G/JdM//Biqa06XKpZcWASdJ9T5K32y6b8o5L8=" media="screen" crossorigin="anonymous">
+
+
+
+
+
+<meta property="og:title" content="API 网关设计 插件编写" />
+<meta property="og:description" content="trpc/http-gateway 需求：对外提供HTTP的转发功能 特性： 支持自定义的Filter和Predicate 兼容spring cloud gateway的配置 网关设计 storage predicate { storage PredicateFactory" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/" />
+<meta property="article:published_time" content="2021-02-26T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-02-26T00:00:00+00:00" />
+<meta itemprop="name" content="API 网关设计 插件编写">
+<meta itemprop="description" content="trpc/http-gateway 需求：对外提供HTTP的转发功能 特性： 支持自定义的Filter和Predicate 兼容spring cloud gateway的配置 网关设计 storage predicate { storage PredicateFactory">
+<meta itemprop="datePublished" content="2021-02-26T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-02-26T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1441">
+
+
+
+<meta itemprop="keywords" content="go," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="API 网关设计 插件编写"/>
+<meta name="twitter:description" content="trpc/http-gateway 需求：对外提供HTTP的转发功能 特性： 支持自定义的Filter和Predicate 兼容spring cloud gateway的配置 网关设计 storage predicate { storage PredicateFactory"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Bufferflies</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://bufferflies.github.io/">首页</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://bufferflies.github.io/post/">归档</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://bufferflies.github.io/tags/">标签</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://bufferflies.github.io/categories/">分类</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://gohugo.io" rel="noopener" target="_blank">
+              支持
+              
+              <i class="iconfont">
+                <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M623.36 272.96 473.216 423.04C467.2 429.056 467.072 438.656 472.896 444.416c0 0-6.72-6.656 1.6 1.6C496.064 467.648 528.64 500.224 528.64 500.224 534.464 506.048 544 505.856 550.016 499.904l150.08-150.144 67.328 66.432c9.024 8.96 27.456 4.544 30.4-8.96 19.968-92.608 46.656-227.52 46.656-227.52 6.848-34.496-16.192-56.704-49.92-49.92 0 0-134.656 26.816-227.328 46.784C560.32 178.048 556.352 182.272 554.752 187.136c-3.2 6.208-3.008 14.208 3.776 20.992L623.36 272.96z"></path>
+  <path d="M841.152 457.152c-30.528 0-54.784 24.512-54.784 54.656l0 274.752L237.696 786.56 237.696 237.696l206.016 0c6.656 0 10.752 0 13.248 0C487.68 237.696 512 213.184 512 182.848 512 152.32 487.36 128 456.96 128L183.04 128C153.216 128 128 152.576 128 182.848c0 3.136 0.256 6.272 0.768 9.28C128.256 195.136 128 198.272 128 201.408l0 639.488c0 0.064 0 0.192 0 0.256 0 0.128 0 0.192 0 0.32 0 30.528 24.512 54.784 54.784 54.784l646.976 0c6.592 0 9.728 0 11.712 0 28.736 0 52.928-22.976 54.464-51.968C896 843.264 896 842.304 896 841.344l0-20.352L896 561.408 896 512.128C896 481.792 871.424 457.152 841.152 457.152z"></path>
+</svg>
+
+              </i>
+            </a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://bufferflies.github.io/about/">简介</a>
+          
+        
+      </li>
+    
+
+    
+  </ul>
+</nav>
+
+
+  
+    
+
+
+
+
+
+
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
+
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+  
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      Bufferflies
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://bufferflies.github.io/">首页</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://bufferflies.github.io/post/">归档</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://bufferflies.github.io/tags/">标签</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://bufferflies.github.io/categories/">分类</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://gohugo.io" rel="noopener" target="_blank">
+              支持
+              
+              <i class="iconfont">
+                <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M623.36 272.96 473.216 423.04C467.2 429.056 467.072 438.656 472.896 444.416c0 0-6.72-6.656 1.6 1.6C496.064 467.648 528.64 500.224 528.64 500.224 534.464 506.048 544 505.856 550.016 499.904l150.08-150.144 67.328 66.432c9.024 8.96 27.456 4.544 30.4-8.96 19.968-92.608 46.656-227.52 46.656-227.52 6.848-34.496-16.192-56.704-49.92-49.92 0 0-134.656 26.816-227.328 46.784C560.32 178.048 556.352 182.272 554.752 187.136c-3.2 6.208-3.008 14.208 3.776 20.992L623.36 272.96z"></path>
+  <path d="M841.152 457.152c-30.528 0-54.784 24.512-54.784 54.656l0 274.752L237.696 786.56 237.696 237.696l206.016 0c6.656 0 10.752 0 13.248 0C487.68 237.696 512 213.184 512 182.848 512 152.32 487.36 128 456.96 128L183.04 128C153.216 128 128 152.576 128 182.848c0 3.136 0.256 6.272 0.768 9.28C128.256 195.136 128 198.272 128 201.408l0 639.488c0 0.064 0 0.192 0 0.256 0 0.128 0 0.192 0 0.32 0 30.528 24.512 54.784 54.784 54.784l646.976 0c6.592 0 9.728 0 11.712 0 28.736 0 52.928-22.976 54.464-51.968C896 843.264 896 842.304 896 841.344l0-20.352L896 561.408 896 512.128C896 481.792 871.424 457.152 841.152 457.152z"></path>
+</svg>
+
+              </i>
+            </a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://bufferflies.github.io/about/">简介</a>
+          
+
+        
+
+      </li>
+    
+
+    
+    
+
+    
+  </ul>
+</nav>
+
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">API 网关设计 插件编写</h1>
+      
+      <div class="post-meta">
+        <time datetime="2021-02-26" class="post-time">
+          2021-02-26
+        </time>
+        <div class="post-category">
+            <a href="https://bufferflies.github.io/categories/gateway/"> gateway </a>
+            
+          </div>
+        
+
+        
+        
+
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title"></h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#网关设计">网关设计</a></li>
+    <li><a href="#类图">类图</a></li>
+    <li><a href="#时序图">时序图</a></li>
+    <li><a href="#使用说明">使用说明</a>
+      <ul>
+        <li><a href="#自定义断言器predicate">自定义断言器（Predicate）</a></li>
+        <li><a href="#自定义过滤器工厂">自定义过滤器工厂</a></li>
+        <li><a href="#自定义全局过滤器">自定义全局过滤器</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      <h1 id="trpchttp-gateway">trpc/http-gateway</h1>
+<p>需求：对外提供HTTP的转发功能
+特性：</p>
+<ul>
+<li>支持自定义的Filter和Predicate</li>
+<li>兼容spring cloud gateway的配置</li>
+</ul>
+<h2 id="网关设计">网关设计</h2>
+<pre><code class="language-plantuml" data-lang="plantuml">storage predicate {
+    storage PredicateFactory
+    storage PathPredicateFactory
+    PredicateFactory&lt;--PathPredicateFactory
+}
+storage route {
+     storage id
+     storage uri 
+     storage Predicate
+     storage FilterChain
+     storage Filter
+     id--&gt;uri
+     id--&gt;Predicate
+     id--&gt;FilterChain
+     FilterChain--&gt;Filter: filter
+}
+storage WebHandler{
+    card Routes
+}
+storage filter {
+    storage FilterFactory
+    storage RemoveFilterFactory 
+    FilterFactory&lt;--RemoveFilterFactory
+}
+control request
+Filter&lt;--FilterFactory:factory
+Predicate&lt;--PredicateFactory: factory
+request -&gt;WebHandler
+WebHandler-&gt;route
+</code></pre><p>执行：</p>
+<ol>
+<li>请求送达到WebHandler中，WebHandler寻找能够处理该请求的Route</li>
+<li>WebHandler找到这个Route，执行过滤器链</li>
+</ol>
+<p>名词解释：</p>
+<ul>
+<li>Route： 一个代理的抽象 包含断言和过滤器</li>
+<li>FilterChain： 过滤器执行器</li>
+<li>Filter： 过滤器，处理http请求</li>
+<li>Predicate： 断言器，给定一个请求，判断其是否可以处理</li>
+</ul>
+<p>说明：</p>
+<ol>
+<li>Webhandler : 请求处理器，负责这个请求的执行</li>
+<li>FilterFactory： 为过滤器的工厂</li>
+<li>PredicateFactory：为断言器的工程</li>
+<li>route：一个代理的设置
+<ul>
+<li>id： 一个代理的唯一ID</li>
+<li>uri： 最终的uri</li>
+<li>predicate：使用的Http断言器</li>
+<li>filters：设置的过滤器</li>
+</ul>
+</li>
+</ol>
+<h2 id="类图">类图</h2>
+<pre><code class="language-plantuml" data-lang="plantuml">interface Filter{
+    PreHandler(request, response)bool
+    PostHandler(request, response)
+}
+
+class RequestFilter{
+    PreHandler(request, response)bool
+    PostHandler(request, response)
+    int order
+}
+
+class GlobalFilter{
+    PreHandler(request, response)bool
+    PostHandler(request, response)
+    int order
+}
+
+class FilterChain{
+    FilterChain(Filter filters[])
+    Filter(request, response)
+}
+
+class RequestFilterFactory&lt;T&gt;{
+    New(string config)RequestFilter
+}
+interface RequestPredicate{
+    Test(request)bool
+}
+class Route{
+    string id
+    string url
+    RequestPredicate predicate
+    RequestFilter []filters
+    
+}
+class WebHandler{
+    Route route[]
+    WebHandler(string path)
+    ServerHttp(request, response)
+    Lookup(request)Route   
+}
+
+
+class RequestPredicateFactory&lt;T&gt;{
+    New(T t)RequestPredicate
+}
+Filter &lt;.. RequestFilter 
+Filter&lt;..GlobalFilter
+RequestPredicate &lt;-- RequestPredicateFactory
+WebHandler&lt;--*Route
+Filter&lt;-- RequestFilterFactory
+</code></pre><p>约定：
+方法大写为public方法
+属性名大写为Public变量</p>
+<h2 id="时序图">时序图</h2>
+<pre><code class="language-plantuml" data-lang="plantuml">actor Request as R
+control WebHandler as W
+control Route as T
+control Predicate as P
+control FilterChain as C
+control Filter as F
+
+R -&gt; W: request xxx.weling.com/test
+W -&gt; T: consult
+T -&gt; P: do test method 
+P --&gt;T: return boolean 
+T -&gt; C: do filter 
+C -&gt; F: do PreHandler and PostHandler
+F --&gt;C: return response
+C --&gt;T: complete
+T --&gt;W: write response to socket
+W --&gt; R: render
+</code></pre><h2 id="使用说明">使用说明</h2>
+<p>##程序启动
+使用步骤：</p>
+<ol>
+<li>配置trpc——go.yml 文件</li>
+<li>配置路由配置</li>
+<li>启动</li>
+</ol>
+<p>启动类</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#000;font-weight:bold">package</span> main
+
+<span style="color:#000;font-weight:bold">import</span> (
+	<span style="color:#d14">&#34;fmt&#34;</span>
+	<span style="color:#d14">&#34;gateway/handler&#34;</span>
+	web <span style="color:#d14">&#34;git.code.oa.com/mossli/trpcweb&#34;</span>
+	<span style="color:#d14">&#34;git.code.oa.com/trpc-go/trpc-go&#34;</span>
+	<span style="color:#d14">&#34;git.code.oa.com/trpc-go/trpc-go/filter&#34;</span>
+	<span style="color:#d14">&#34;git.code.oa.com/trpc-go/trpc-go/log&#34;</span>
+	<span style="color:#d14">&#34;git.code.oa.com/trpc-go/trpc-go/plugin&#34;</span>
+	<span style="color:#d14">&#34;git.code.oa.com/trpc-go/trpc-go/server&#34;</span>
+	<span style="color:#d14">&#34;net/http&#34;</span>
+)
+<span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">main</span>(){
+
+	<span style="color:#998;font-style:italic">// load log config
+</span><span style="color:#998;font-style:italic"></span>	plugin.<span style="color:#900;font-weight:bold">Register</span>(<span style="color:#d14">&#34;custom&#34;</span>, log.DefaultLogFactory)
+	<span style="color:#998;font-style:italic">// load trpc config 
+</span><span style="color:#998;font-style:italic"></span>	opts <span style="color:#000;font-weight:bold">:=</span> []server.Option{
+		server.<span style="color:#900;font-weight:bold">WithFilter</span>(filter.NoopFilter),
+	}
+	server <span style="color:#000;font-weight:bold">:=</span> trpc.<span style="color:#900;font-weight:bold">NewServer</span>(opts<span style="color:#000;font-weight:bold">...</span>)
+	s <span style="color:#000;font-weight:bold">:=</span> web.<span style="color:#900;font-weight:bold">Server</span>(server)
+	<span style="color:#998;font-style:italic">// for gateway
+</span><span style="color:#998;font-style:italic"></span>	svi <span style="color:#000;font-weight:bold">:=</span> web.<span style="color:#900;font-weight:bold">Service</span>(s.Server, <span style="color:#d14">&#34;web.mossli.gateway.TestSrv2&#34;</span>)
+	h<span style="color:#000;font-weight:bold">:=</span>handler.<span style="color:#900;font-weight:bold">New</span>()
+	svi.<span style="color:#900;font-weight:bold">Handle</span>(<span style="color:#d14">&#34;/&#34;</span>,h)
+	<span style="color:#998;font-style:italic">// start stub for test
+</span><span style="color:#998;font-style:italic"></span>	svi2 <span style="color:#000;font-weight:bold">:=</span> web.<span style="color:#900;font-weight:bold">Service</span>(s.Server, <span style="color:#d14">&#34;web.mossli.gateway.TestSrv3&#34;</span>)
+	svi2.<span style="color:#900;font-weight:bold">HandleFunc</span>(<span style="color:#d14">&#34;/&#34;</span>,<span style="color:#000;font-weight:bold">func</span>(w http.ResponseWriter, r <span style="color:#000;font-weight:bold">*</span>http.Request){
+		w.<span style="color:#900;font-weight:bold">WriteHeader</span>(<span style="color:#099">200</span>)
+		fmt.<span style="color:#900;font-weight:bold">Fprintf</span>(w, <span style="color:#d14">&#34;echo&#34;</span>)
+	})
+	s.<span style="color:#900;font-weight:bold">Serve</span>()
+}
+</code></pre></div><p>路由配置</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">[{
+  <span style="color:#000080">&#34;id&#34;</span>: <span style="color:#d14">&#34;auth&#34;</span>,
+  <span style="color:#000080">&#34;uri&#34;</span>: <span style="color:#d14">&#34;lb://localhost:8021&#34;</span>,
+  <span style="color:#000080">&#34;predicates&#34;</span>: [
+    {
+    <span style="color:#a61717;background-color:#e3d2d2">//为自定义断言器工厂的name</span>
+      <span style="color:#000080">&#34;name&#34;</span>: <span style="color:#d14">&#34;Path&#34;</span>,
+      <span style="color:#000080">&#34;args&#34;</span>: <span style="color:#d14">&#34;/test/*&#34;</span>
+    }
+  ],
+  <span style="color:#000080">&#34;filters&#34;</span>: [
+    {
+    <span style="color:#a61717;background-color:#e3d2d2">//为自定义过滤器工厂的name</span>
+      <span style="color:#000080">&#34;name&#34;</span>: <span style="color:#d14">&#34;RemoveHeader&#34;</span>,
+      <span style="color:#000080">&#34;args&#34;</span>: <span style="color:#d14">&#34;Auth&#34;</span>
+    }
+  ]
+}]
+</code></pre></div><h3 id="自定义断言器predicate">自定义断言器（Predicate）</h3>
+<p>断言器是<strong>多例的</strong>，但是其工厂是<strong>单例的</strong>
+约定：</p>
+<ul>
+<li>断言器命名以Predicate结尾</li>
+<li>断言器工厂命名以PredicateFactory结尾</li>
+</ul>
+<p>步骤：</p>
+<ol>
+<li>自定义断言器 实现RequestPredicate接口</li>
+<li>自定义断言器工厂 实现RequestPredicateFactory</li>
+<li>推荐自定义一个Config结构体</li>
+<li>注册断言器工厂</li>
+</ol>
+<p>代码如下：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#000;font-weight:bold">package</span> predicate
+
+<span style="color:#000;font-weight:bold">import</span> (
+	<span style="color:#d14">&#34;net/http&#34;</span>
+	<span style="color:#d14">&#34;strings&#34;</span>
+)
+
+<span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">init</span>(){
+	<span style="color:#900;font-weight:bold">RegisterFactory</span>(<span style="color:#d14">&#34;method&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>MethodPredicateFactory{})
+}
+<span style="color:#998;font-style:italic">/**
+</span><span style="color:#998;font-style:italic">请求方法Method断言器
+</span><span style="color:#998;font-style:italic"> */</span>
+<span style="color:#000;font-weight:bold">type</span> MethodPredicateFactory <span style="color:#000;font-weight:bold">struct</span> {
+}
+<span style="color:#000;font-weight:bold">type</span> MethodRequestPredicate <span style="color:#000;font-weight:bold">struct</span>{
+	config MethodConfig
+}
+
+<span style="color:#000;font-weight:bold">type</span> MethodConfig <span style="color:#000;font-weight:bold">struct</span> {
+	methods []<span style="color:#458;font-weight:bold">string</span>
+}
+<span style="color:#000;font-weight:bold">func</span> (p <span style="color:#000;font-weight:bold">*</span>MethodRequestPredicate)<span style="color:#900;font-weight:bold">Test</span>(r <span style="color:#000;font-weight:bold">*</span>http.Request)<span style="color:#458;font-weight:bold">bool</span>{
+	<span style="color:#000;font-weight:bold">for</span> _,method<span style="color:#000;font-weight:bold">:=</span><span style="color:#000;font-weight:bold">range</span> p.config.methods{
+		<span style="color:#000;font-weight:bold">if</span> method<span style="color:#000;font-weight:bold">==</span>r.Method{
+			<span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">true</span>
+		}
+	}
+	<span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">false</span>
+}
+<span style="color:#998;font-style:italic">// methods 以逗号进行分割
+</span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">func</span> (p <span style="color:#000;font-weight:bold">*</span>MethodPredicateFactory)<span style="color:#900;font-weight:bold">New</span>(methods <span style="color:#458;font-weight:bold">string</span>)RequestPredicate{
+	m<span style="color:#000;font-weight:bold">:=</span>strings.<span style="color:#900;font-weight:bold">Split</span>(methods,<span style="color:#d14">&#34;,&#34;</span>)
+	<span style="color:#998;font-style:italic">// http 中method均是大写
+</span><span style="color:#998;font-style:italic"></span>	<span style="color:#000;font-weight:bold">for</span> i,method<span style="color:#000;font-weight:bold">:=</span><span style="color:#000;font-weight:bold">range</span> m{
+		m[i]=strings.<span style="color:#900;font-weight:bold">ToUpper</span>(method)
+	}
+	<span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">&amp;</span>MethodRequestPredicate{MethodConfig{m}}
+}
+</code></pre></div><h3 id="自定义过滤器工厂">自定义过滤器工厂</h3>
+<p>过滤器是<strong>多例的</strong>，但是其工厂是<strong>单例</strong></p>
+<p>约定</p>
+<ul>
+<li>过滤器命名以Filter结尾</li>
+<li>过滤器工厂命名以FilterFactory结尾</li>
+</ul>
+<p>使用步骤：</p>
+<ol>
+<li>自定义过滤器 实现Filter接口</li>
+<li>自定义过滤器工厂 实现FilterFactory</li>
+<li>推荐自定义一个Config结构体</li>
+<li>注册过滤器工厂</li>
+</ol>
+<p>代码如下</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#000;font-weight:bold">package</span> filter
+
+<span style="color:#000;font-weight:bold">import</span> (
+	<span style="color:#d14">&#34;gateway/utils&#34;</span>
+	<span style="color:#d14">&#34;net/http&#34;</span>
+	<span style="color:#d14">&#34;strings&#34;</span>
+)
+
+<span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">init</span>(){
+	<span style="color:#900;font-weight:bold">Register</span>(<span style="color:#d14">&#34;RemoveHeader&#34;</span>,<span style="color:#000;font-weight:bold">&amp;</span>RemoveHeaderFilterFactory{})
+}
+<span style="color:#000;font-weight:bold">type</span> RemoveHeaderFilterFactory <span style="color:#000;font-weight:bold">struct</span>{
+}
+
+<span style="color:#000;font-weight:bold">type</span> RemoveHeaderFilter <span style="color:#000;font-weight:bold">struct</span>{
+	config RemoveConfig
+	order <span style="color:#458;font-weight:bold">int</span>
+}
+<span style="color:#000;font-weight:bold">type</span> RemoveConfig <span style="color:#000;font-weight:bold">struct</span> {
+	headers []<span style="color:#458;font-weight:bold">string</span>
+}
+
+<span style="color:#000;font-weight:bold">func</span> (f <span style="color:#000;font-weight:bold">*</span>RemoveHeaderFilter) <span style="color:#900;font-weight:bold">PreHandler</span>(response http.ResponseWriter,request <span style="color:#000;font-weight:bold">*</span>http.Request)<span style="color:#458;font-weight:bold">bool</span>{
+	headers<span style="color:#000;font-weight:bold">:=</span>request.Header
+	<span style="color:#000;font-weight:bold">for</span> name,_<span style="color:#000;font-weight:bold">:=</span><span style="color:#000;font-weight:bold">range</span> headers{
+		<span style="color:#000;font-weight:bold">if</span> utils.<span style="color:#900;font-weight:bold">ContainerString</span>(f.config.headers,name){
+			headers.<span style="color:#900;font-weight:bold">Del</span>(name)
+		}
+	}
+	<span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">true</span>
+}
+<span style="color:#000;font-weight:bold">func</span> (f <span style="color:#000;font-weight:bold">*</span>RemoveHeaderFilter) <span style="color:#900;font-weight:bold">PostHandler</span>(response http.ResponseWriter,request <span style="color:#000;font-weight:bold">*</span>http.Request){
+
+}
+<span style="color:#000;font-weight:bold">func</span> (f <span style="color:#000;font-weight:bold">*</span>RemoveHeaderFilter)<span style="color:#900;font-weight:bold">getOrder</span>()<span style="color:#458;font-weight:bold">int</span>{
+	<span style="color:#000;font-weight:bold">return</span> f.order
+}
+<span style="color:#000;font-weight:bold">func</span> (f <span style="color:#000;font-weight:bold">*</span>RemoveHeaderFilter)<span style="color:#900;font-weight:bold">SetOrder</span>(order <span style="color:#458;font-weight:bold">int</span>)Filter{
+	f.order=order
+	<span style="color:#000;font-weight:bold">return</span> f
+}
+<span style="color:#000;font-weight:bold">func</span> (f <span style="color:#000;font-weight:bold">*</span>RemoveHeaderFilterFactory)<span style="color:#900;font-weight:bold">New</span>(config <span style="color:#458;font-weight:bold">string</span>)Filter{
+	<span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">&amp;</span>RemoveHeaderFilter{RemoveConfig{strings.<span style="color:#900;font-weight:bold">Split</span>(config,<span style="color:#d14">&#34;,&#34;</span>)},<span style="color:#099">0</span>}
+}
+</code></pre></div><h3 id="自定义全局过滤器">自定义全局过滤器</h3>
+<p>有时候需要使用全局过滤器，针对的是所有的代理，全局代理器是<strong>单例</strong></p>
+<p>约定：</p>
+<ul>
+<li>全局过滤器以GlobalFilter结尾</li>
+</ul>
+<p>使用步骤：</p>
+<ol>
+<li>自定义过滤器 实现Filter接口</li>
+<li>注册全局过滤器</li>
+</ol>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#000;font-weight:bold">package</span> filter
+
+<span style="color:#000;font-weight:bold">import</span> (
+	<span style="color:#d14">&#34;fmt&#34;</span>
+	<span style="color:#d14">&#34;net/http&#34;</span>
+	<span style="color:#d14">&#34;net/http/httputil&#34;</span>
+	<span style="color:#d14">&#34;net/url&#34;</span>
+	<span style="color:#d14">&#34;trpc-go/log&#34;</span>
+)
+
+<span style="color:#998;font-style:italic">/**
+</span><span style="color:#998;font-style:italic">进行注册
+</span><span style="color:#998;font-style:italic"> */</span>
+<span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">init</span>(){
+	<span style="color:#900;font-weight:bold">RegisterGlobalFilter</span>(<span style="color:#d14">&#34;proxy&#34;</span>,<span style="color:#000;font-weight:bold">&amp;</span>ProxyFilter{order:<span style="color:#099">1024</span>})
+}
+<span style="color:#000;font-weight:bold">type</span> ProxyFilter <span style="color:#000;font-weight:bold">struct</span>{
+	order <span style="color:#458;font-weight:bold">int</span>
+}
+<span style="color:#000;font-weight:bold">func</span> (p <span style="color:#000;font-weight:bold">*</span>ProxyFilter) <span style="color:#900;font-weight:bold">PreHandler</span>(response http.ResponseWriter,request <span style="color:#000;font-weight:bold">*</span>http.Request)<span style="color:#458;font-weight:bold">bool</span>{
+	<span style="color:#000;font-weight:bold">defer</span> <span style="color:#000;font-weight:bold">func</span>(){
+		<span style="color:#000;font-weight:bold">if</span> err<span style="color:#000;font-weight:bold">:=</span><span style="color:#0086b3">recover</span>();err<span style="color:#000;font-weight:bold">!=</span><span style="color:#000;font-weight:bold">nil</span>{
+			log.<span style="color:#900;font-weight:bold">Error</span>(<span style="color:#d14">&#34;proxy filter has error&#34;</span>,err)
+		}
+	}()
+
+	route<span style="color:#000;font-weight:bold">:=</span>request.<span style="color:#900;font-weight:bold">Context</span>().<span style="color:#900;font-weight:bold">Value</span>(<span style="color:#d14">&#34;route&#34;</span>)
+	<span style="color:#000;font-weight:bold">if</span> route<span style="color:#000;font-weight:bold">!=</span><span style="color:#000;font-weight:bold">nil</span>{
+		fmt.<span style="color:#900;font-weight:bold">Printf</span>(<span style="color:#d14">&#34;uri is %s /n&#34;</span>,route)
+	}<span style="color:#000;font-weight:bold">else</span> {
+		<span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">false</span>
+	}
+	r <span style="color:#000;font-weight:bold">:=</span> route.(<span style="color:#458;font-weight:bold">string</span>)
+	uri,err<span style="color:#000;font-weight:bold">:=</span>url.<span style="color:#900;font-weight:bold">Parse</span>(r)
+	<span style="color:#000;font-weight:bold">if</span> err<span style="color:#000;font-weight:bold">!=</span><span style="color:#000;font-weight:bold">nil</span>{
+		response.<span style="color:#900;font-weight:bold">WriteHeader</span>(http.StatusInternalServerError)
+		<span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">false</span>
+	}
+	<span style="color:#998;font-style:italic">// not support http and https
+</span><span style="color:#998;font-style:italic"></span>	<span style="color:#000;font-weight:bold">if</span> uri.Scheme<span style="color:#000;font-weight:bold">!=</span><span style="color:#d14">&#34;http&#34;</span><span style="color:#000;font-weight:bold">||</span>uri.Scheme<span style="color:#000;font-weight:bold">!=</span><span style="color:#d14">&#34;https&#34;</span>{
+		response.<span style="color:#900;font-weight:bold">WriteHeader</span>(http.StatusInternalServerError)
+		<span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">false</span>
+	}
+	proxy <span style="color:#000;font-weight:bold">:=</span> httputil.<span style="color:#900;font-weight:bold">NewSingleHostReverseProxy</span>(uri)
+	proxy.<span style="color:#900;font-weight:bold">ServeHTTP</span>(response, request)
+	<span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">true</span>
+}
+<span style="color:#000;font-weight:bold">func</span> (p <span style="color:#000;font-weight:bold">*</span>ProxyFilter) <span style="color:#900;font-weight:bold">PostHandler</span>(response http.ResponseWriter,request <span style="color:#000;font-weight:bold">*</span>http.Request){
+	fmt.<span style="color:#900;font-weight:bold">Println</span>(<span style="color:#d14">&#34;proxy complete&#34;</span>)
+}
+<span style="color:#000;font-weight:bold">func</span> (p <span style="color:#000;font-weight:bold">*</span>ProxyFilter) <span style="color:#900;font-weight:bold">getOrder</span>()<span style="color:#458;font-weight:bold">int</span>{
+	<span style="color:#000;font-weight:bold">return</span> p.order
+}
+<span style="color:#000;font-weight:bold">func</span> (p <span style="color:#000;font-weight:bold">*</span>ProxyFilter) <span style="color:#900;font-weight:bold">SetOrder</span>(order <span style="color:#458;font-weight:bold">int</span>)Filter{
+	p.order=order
+	<span style="color:#000;font-weight:bold">return</span> p
+}
+</code></pre></div>
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title"></span>
+    <span class="item-content">bufferflies</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title"></span>
+    <span class="item-content">
+      2021-02-26
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title"></span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://bufferflies.github.io/tags/go/">go</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/gateway/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/">
+            
+            <i class="iconfont">
+              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
+</svg>
+
+            </i>
+            <span class="prev-text nav-default">API 网关设计 OAuth2</span>
+            <span class="prev-text nav-mobile"></span>
+          </a>
+        
+          <a class="next" href="/post/gateway/spring-cloud-%E8%BF%87%E6%BB%A4%E5%99%A8/">
+            <span class="next-text nav-default">Spirng Cloud 过滤器</span>
+            <span class="prev-text nav-mobile"></span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+    
+
+  
+
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="icon-links">
+  
+  
+    <a href="1045931706@qq.com" rel="me noopener" class="iconfont"
+      title="email"  target="_blank"
+      >
+      <svg class="icon" viewBox="0 0 1451 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+    </a>
+
+
+<a href="https://bufferflies.github.io/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+    class="iconfont" title="rss" target="_blank">
+    <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="30" height="30">
+  <path d="M819.157333 1024C819.157333 574.592 449.408 204.8 0 204.8V0c561.706667 0 1024 462.293333 1024 1024h-204.842667zM140.416 743.04a140.8 140.8 0 0 1 140.501333 140.586667A140.928 140.928 0 0 1 140.074667 1024C62.72 1024 0 961.109333 0 883.626667s62.933333-140.544 140.416-140.586667zM678.784 1024h-199.04c0-263.210667-216.533333-479.786667-479.744-479.786667V345.173333c372.352 0 678.784 306.517333 678.784 678.826667z"></path>
+</svg>
+
+  </a>
+   
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+      2020 -
+    2021
+    <span class="heart">
+      
+      <i class="iconfont">
+        <svg class="icon" viewBox="0 0 1025 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="14" height="14">
+  <path d="M1000.1 247.9c-15.5-37.3-37.6-70.6-65.7-98.9-54.4-54.8-125.8-85-201-85-85.7 0-166 39-221.4 107.4C456.6 103 376.3 64 290.6 64c-75.1 0-146.5 30.4-201.1 85.6-28.2 28.5-50.4 61.9-65.8 99.3-16 38.8-24 79.9-23.6 122.2 0.7 91.7 40.1 177.2 108.1 234.8 3.1 2.6 6 5.1 8.9 7.8 14.9 13.4 58 52.8 112.6 102.7 93.5 85.5 209.9 191.9 257.5 234.2 7 6.1 15.8 9.5 24.9 9.5 9.2 0 18.1-3.4 24.9-9.5 34.5-30.7 105.8-95.9 181.4-165 74.2-67.8 150.9-138 195.8-178.2 69.5-57.9 109.6-144.4 109.9-237.3 0.1-42.5-8-83.6-24-122.2z"
+   fill="#8a8a8a"></path>
+</svg>
+
+      </i>
+    </span><span class="author">
+        bufferflies
+        
+      </span></span>
+
+  
+  
+
+  
+</div>
+
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont">
+        
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="35" height="35">
+  <path d="M510.866688 227.694839 95.449397 629.218702l235.761562 0-2.057869 328.796468 362.40389 0L691.55698 628.188232l241.942331-3.089361L510.866688 227.694839zM63.840492 63.962777l894.052392 0 0 131.813095L63.840492 195.775872 63.840492 63.962777 63.840492 63.962777zM63.840492 63.962777"></path>
+</svg>
+
+      </i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+
+
+
+
+<script type="text/javascript" src="/js/main.638251f4230630f0335d8c6748e53a96f94b72670920b60c09a56fdc8bece214.js" integrity="sha256-Y4JR9CMGMPAzXYxnSOU6lvlLcmcJILYMCaVv3Ivs4hQ=" crossorigin="anonymous"></script>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/gh/jmnote/plantuml-encoder@1.2.4/dist/plantuml-encoder.min.js" integrity="sha256-Qsk2KRBCN5qVZX7B+8+2IvQl1Aqc723qV1tBCQaVoqo=" crossorigin="anonymous"></script>
+<script>
+(function(){
+  let plantumlPrefix = "language-plantuml";
+  Array.prototype.forEach.call(document.querySelectorAll("[class^=" + plantumlPrefix + "]"), function(code){
+    let image = document.createElement("IMG");
+    image.loading = 'lazy'; 
+    image.src = 'http://www.plantuml.com/plantuml/svg/~1' + plantumlEncoder.encode(code.innerText);
+    code.parentNode.insertBefore(image, code);
+    code.style.display = 'none';
+  });
+})();
+</script>
+
+
+
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+
+
+
+
+
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

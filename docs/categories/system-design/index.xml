@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>system design on blog for bufferflies</title>
+    <link>https://bufferflies.github.io/categories/system-design/</link>
+    <description>Recent content in system design on blog for bufferflies</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>bufferflies</copyright>
+    <lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/categories/system-design/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>日志收集</title>
+      <link>https://bufferflies.github.io/post/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E5%88%86%E6%9E%90/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E5%88%86%E6%9E%90/</guid>
+      <description>日志收集 日志现状（小时级别） 每个服务大约都是百兆级别 日志方案（主要在采集与聚合的差别） node node{ storage Agent } storage MQ storage Collector storage Storage storage Visualization Agent -&amp;gt; MQ: buffering MQ -&amp;gt; Collector: filtering and aggregate Collector -&amp;gt; Storage: index</description>
+    </item>
+    
+    <item>
+      <title>高并发指标</title>
+      <link>https://bufferflies.github.io/post/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/</guid>
+      <description>高并发指标 RT 响应时间 throughput： 吞吐量 QPS：question per second 每秒的请求数量 并发用户数 PV：page view 页面被浏览的次数(点击量</description>
+    </item>
+    
+  </channel>
+</rss>

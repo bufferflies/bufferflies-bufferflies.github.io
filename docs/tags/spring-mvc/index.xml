@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>spring mvc on blog for bufferflies</title>
+    <link>https://bufferflies.github.io/tags/spring-mvc/</link>
+    <description>Recent content in spring mvc on blog for bufferflies</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>bufferflies</copyright>
+    <lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/tags/spring-mvc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>spring 源码解析--mvc 处理流程</title>
+      <link>https://bufferflies.github.io/post/spring-webmvc-%E6%BA%90%E7%A0%81/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/spring-webmvc-%E6%BA%90%E7%A0%81/</guid>
+      <description>spring 源码解析&amp;ndash;mvc 处理流程 客户端发出HTTP请求，框架找到并执行对应的方法，最后将执行的结果进行返回 简单的版本预设条件： 1.不用</description>
+    </item>
+    
+  </channel>
+</rss>

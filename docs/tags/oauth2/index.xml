@@ -10,10 +10,10 @@
     <lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/tags/oauth2/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>API 网关设计 OAuth2</title>
-      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</link>
+      <link>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</guid>
+      <guid>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</guid>
       <description>领域模型 核心功能：为网关提供用户认证服务 提供的功能： 能够接入支持OAuth2的认证服务 用户登陆成功后可以跳转到之前访问的页面 领域图 storage request storage proxy storage</description>
     </item>
     

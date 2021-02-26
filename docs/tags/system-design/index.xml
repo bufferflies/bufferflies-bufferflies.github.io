@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>system design on blog for bufferflies</title>
+    <link>https://bufferflies.github.io/tags/system-design/</link>
+    <description>Recent content in system design on blog for bufferflies</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>bufferflies</copyright>
+    <lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/tags/system-design/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>高并发指标</title>
+      <link>https://bufferflies.github.io/post/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/</guid>
+      <description>高并发指标 RT 响应时间 throughput： 吞吐量 QPS：question per second 每秒的请求数量 并发用户数 PV：page view 页面被浏览的次数(点击量</description>
+    </item>
+    
+  </channel>
+</rss>

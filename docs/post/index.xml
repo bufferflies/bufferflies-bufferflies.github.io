@@ -10,29 +10,47 @@
     <lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>API 网关设计</title>
-      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</link>
+      <link>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</guid>
+      <guid>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</guid>
       <description>网关评审 需求 需要的能力： 路由 协议转换 服务发现 mertices监控 路由动态更新 支持OAuth2，LDAP身份认证 熔断 重试 流量控制 负载均衡 场景一</description>
     </item>
     
     <item>
       <title>API 网关设计 OAuth2</title>
-      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</link>
+      <link>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</guid>
+      <guid>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</guid>
       <description>领域模型 核心功能：为网关提供用户认证服务 提供的功能： 能够接入支持OAuth2的认证服务 用户登陆成功后可以跳转到之前访问的页面 领域图 storage request storage proxy storage</description>
     </item>
     
     <item>
       <title>API 网关设计 插件编写</title>
-      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</link>
+      <link>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</guid>
+      <guid>https://bufferflies.github.io/post/gateway/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</guid>
       <description>trpc/http-gateway 需求：对外提供HTTP的转发功能 特性： 支持自定义的Filter和Predicate 兼容spring cloud gateway的配置 网关设计 storage predicate { storage PredicateFactory</description>
+    </item>
+    
+    <item>
+      <title>Spirng Cloud 过滤器</title>
+      <link>https://bufferflies.github.io/post/gateway/spring-cloud-%E8%BF%87%E6%BB%A4%E5%99%A8/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/gateway/spring-cloud-%E8%BF%87%E6%BB%A4%E5%99%A8/</guid>
+      <description>网关 通用过滤器 过滤器 作用 描述 RemoveCachedBodyFilter 处理缓存 MIN_LEVEL AdaptCachedBodyGlobalFilter MIN_LEVEL+1000 NettyWriteResponseFilter 返回response body -1 ForwardPathFilter 处理uri为&amp;quot;forward&amp;quot;请求 0 RouteToRequesrUrlFilter 处理URI</description>
+    </item>
+    
+    <item>
+      <title>spring 源码解析--mvc 处理流程</title>
+      <link>https://bufferflies.github.io/post/spring-webmvc-%E6%BA%90%E7%A0%81/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/spring-webmvc-%E6%BA%90%E7%A0%81/</guid>
+      <description>spring 源码解析&amp;ndash;mvc 处理流程 客户端发出HTTP请求，框架找到并执行对应的方法，最后将执行的结果进行返回 简单的版本预设条件： 1.不用</description>
     </item>
     
     <item>
@@ -45,21 +63,39 @@
     </item>
     
     <item>
+      <title>日志收集</title>
+      <link>https://bufferflies.github.io/post/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E5%88%86%E6%9E%90/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E5%88%86%E6%9E%90/</guid>
+      <description>日志收集 日志现状（小时级别） 每个服务大约都是百兆级别 日志方案（主要在采集与聚合的差别） node node{ storage Agent } storage MQ storage Collector storage Storage storage Visualization Agent -&amp;gt; MQ: buffering MQ -&amp;gt; Collector: filtering and aggregate Collector -&amp;gt; Storage: index</description>
+    </item>
+    
+    <item>
+      <title>通信杂谈</title>
+      <link>https://bufferflies.github.io/post/%E9%80%9A%E4%BF%A1%E6%9D%82%E8%B0%88/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/%E9%80%9A%E4%BF%A1%E6%9D%82%E8%B0%88/</guid>
+      <description>通信杂谈 以下情形不进行考虑： 数据传输的可靠性 初代： interface sender queue transfer interface handler sender-&amp;gt;transfer transfer-&amp;gt;handler sender发送二进制流 handler 接收二进制流并进行处理 transfer 传输介质 最早发现的问题：</description>
+    </item>
+    
+    <item>
+      <title>高并发指标</title>
+      <link>https://bufferflies.github.io/post/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/%E9%AB%98%E5%B9%B6%E5%8F%91%E6%8C%87%E6%A0%87/</guid>
+      <description>高并发指标 RT 响应时间 throughput： 吞吐量 QPS：question per second 每秒的请求数量 并发用户数 PV：page view 页面被浏览的次数(点击量</description>
+    </item>
+    
+    <item>
       <title>zsh</title>
       <link>https://bufferflies.github.io/post/zsh-%E5%AE%89%E8%A3%85/</link>
       <pubDate>Sat, 20 Feb 2021 00:00:00 +0000</pubDate>
       
       <guid>https://bufferflies.github.io/post/zsh-%E5%AE%89%E8%A3%85/</guid>
       <description>安装oh-my-zsh sh -c &amp;quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&amp;quot; 安装插件 进入oh-my-zsh插件库中 cd ~/.oh-my-zsh/custom/plugins/ 下载插件（自动补全为例） git clone git://github.com/zsh-users/zsh-autosuggestions 其实插件名就是仓库名（zsh-aut</description>
-    </item>
-    
-    <item>
-      <title>网络基础</title>
-      <link>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C/</link>
-      <pubDate>Thu, 05 Nov 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C/</guid>
-      <description>网络基础协议</description>
     </item>
     
     <item>
