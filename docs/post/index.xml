@@ -18,6 +18,15 @@
     </item>
     
     <item>
+      <title>API 网关设计 插件编写</title>
+      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</guid>
+      <description>trpc/http-gateway 需求：对外提供HTTP的转发功能 特性： 支持自定义的Filter和Predicate 兼容spring cloud gateway的配置 网关设计 storage predicate { storage PredicateFactory</description>
+    </item>
+    
+    <item>
       <title>一次OkHTTP3 网络排查</title>
       <link>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>

@@ -167,6 +167,397 @@ http——proxy 提供http代理&lt;/p&gt;
     </item>
     
     <item>
+      <title>API 网关设计 插件编写</title>
+      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</guid>
+      
+        <description>&lt;h1 id=&#34;trpchttp-gateway&#34;&gt;trpc/http-gateway&lt;/h1&gt;
+&lt;p&gt;需求：对外提供HTTP的转发功能
+特性：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;支持自定义的Filter和Predicate&lt;/li&gt;
+&lt;li&gt;兼容spring cloud gateway的配置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;网关设计&#34;&gt;网关设计&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;storage predicate {
+    storage PredicateFactory
+    storage PathPredicateFactory
+    PredicateFactory&amp;lt;--PathPredicateFactory
+}
+storage route {
+     storage id
+     storage uri 
+     storage Predicate
+     storage FilterChain
+     storage Filter
+     id--&amp;gt;uri
+     id--&amp;gt;Predicate
+     id--&amp;gt;FilterChain
+     FilterChain--&amp;gt;Filter: filter
+}
+storage WebHandler{
+    card Routes
+}
+storage filter {
+    storage FilterFactory
+    storage RemoveFilterFactory 
+    FilterFactory&amp;lt;--RemoveFilterFactory
+}
+control request
+Filter&amp;lt;--FilterFactory:factory
+Predicate&amp;lt;--PredicateFactory: factory
+request -&amp;gt;WebHandler
+WebHandler-&amp;gt;route
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;执行：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;请求送达到WebHandler中，WebHandler寻找能够处理该请求的Route&lt;/li&gt;
+&lt;li&gt;WebHandler找到这个Route，执行过滤器链&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;名词解释：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Route： 一个代理的抽象 包含断言和过滤器&lt;/li&gt;
+&lt;li&gt;FilterChain： 过滤器执行器&lt;/li&gt;
+&lt;li&gt;Filter： 过滤器，处理http请求&lt;/li&gt;
+&lt;li&gt;Predicate： 断言器，给定一个请求，判断其是否可以处理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;说明：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Webhandler : 请求处理器，负责这个请求的执行&lt;/li&gt;
+&lt;li&gt;FilterFactory： 为过滤器的工厂&lt;/li&gt;
+&lt;li&gt;PredicateFactory：为断言器的工程&lt;/li&gt;
+&lt;li&gt;route：一个代理的设置
+&lt;ul&gt;
+&lt;li&gt;id： 一个代理的唯一ID&lt;/li&gt;
+&lt;li&gt;uri： 最终的uri&lt;/li&gt;
+&lt;li&gt;predicate：使用的Http断言器&lt;/li&gt;
+&lt;li&gt;filters：设置的过滤器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;类图&#34;&gt;类图&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;interface Filter{
+    PreHandler(request, response)bool
+    PostHandler(request, response)
+}
+
+class RequestFilter{
+    PreHandler(request, response)bool
+    PostHandler(request, response)
+    int order
+}
+
+class GlobalFilter{
+    PreHandler(request, response)bool
+    PostHandler(request, response)
+    int order
+}
+
+class FilterChain{
+    FilterChain(Filter filters[])
+    Filter(request, response)
+}
+
+class RequestFilterFactory&amp;lt;T&amp;gt;{
+    New(string config)RequestFilter
+}
+interface RequestPredicate{
+    Test(request)bool
+}
+class Route{
+    string id
+    string url
+    RequestPredicate predicate
+    RequestFilter []filters
+    
+}
+class WebHandler{
+    Route route[]
+    WebHandler(string path)
+    ServerHttp(request, response)
+    Lookup(request)Route   
+}
+
+
+class RequestPredicateFactory&amp;lt;T&amp;gt;{
+    New(T t)RequestPredicate
+}
+Filter &amp;lt;.. RequestFilter 
+Filter&amp;lt;..GlobalFilter
+RequestPredicate &amp;lt;-- RequestPredicateFactory
+WebHandler&amp;lt;--*Route
+Filter&amp;lt;-- RequestFilterFactory
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;约定：
+方法大写为public方法
+属性名大写为Public变量&lt;/p&gt;
+&lt;h2 id=&#34;时序图&#34;&gt;时序图&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;actor Request as R
+control WebHandler as W
+control Route as T
+control Predicate as P
+control FilterChain as C
+control Filter as F
+
+R -&amp;gt; W: request xxx.weling.com/test
+W -&amp;gt; T: consult
+T -&amp;gt; P: do test method 
+P --&amp;gt;T: return boolean 
+T -&amp;gt; C: do filter 
+C -&amp;gt; F: do PreHandler and PostHandler
+F --&amp;gt;C: return response
+C --&amp;gt;T: complete
+T --&amp;gt;W: write response to socket
+W --&amp;gt; R: render
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;使用说明&#34;&gt;使用说明&lt;/h2&gt;
+&lt;p&gt;##程序启动
+使用步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;配置trpc——go.yml 文件&lt;/li&gt;
+&lt;li&gt;配置路由配置&lt;/li&gt;
+&lt;li&gt;启动&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;启动类&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;package&lt;/span&gt; main
+
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;import&lt;/span&gt; (
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;gateway/handler&amp;#34;&lt;/span&gt;
+	web &lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;git.code.oa.com/mossli/trpcweb&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;git.code.oa.com/trpc-go/trpc-go&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;git.code.oa.com/trpc-go/trpc-go/filter&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;git.code.oa.com/trpc-go/trpc-go/log&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;git.code.oa.com/trpc-go/trpc-go/plugin&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;git.code.oa.com/trpc-go/trpc-go/server&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;net/http&amp;#34;&lt;/span&gt;
+)
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;main&lt;/span&gt;(){
+
+	&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;// load log config
+&lt;/span&gt;&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;&lt;/span&gt;	plugin.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Register&lt;/span&gt;(&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;custom&amp;#34;&lt;/span&gt;, log.DefaultLogFactory)
+	&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;// load trpc config 
+&lt;/span&gt;&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;&lt;/span&gt;	opts &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt; []server.Option{
+		server.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;WithFilter&lt;/span&gt;(filter.NoopFilter),
+	}
+	server &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt; trpc.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;NewServer&lt;/span&gt;(opts&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;...&lt;/span&gt;)
+	s &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt; web.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Server&lt;/span&gt;(server)
+	&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;// for gateway
+&lt;/span&gt;&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;&lt;/span&gt;	svi &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt; web.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Service&lt;/span&gt;(s.Server, &lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;web.mossli.gateway.TestSrv2&amp;#34;&lt;/span&gt;)
+	h&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt;handler.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;New&lt;/span&gt;()
+	svi.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Handle&lt;/span&gt;(&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;/&amp;#34;&lt;/span&gt;,h)
+	&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;// start stub for test
+&lt;/span&gt;&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;&lt;/span&gt;	svi2 &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt; web.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Service&lt;/span&gt;(s.Server, &lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;web.mossli.gateway.TestSrv3&amp;#34;&lt;/span&gt;)
+	svi2.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;HandleFunc&lt;/span&gt;(&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;/&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt;(w http.ResponseWriter, r &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;http.Request){
+		w.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;WriteHeader&lt;/span&gt;(&lt;span style=&#34;color:#099&#34;&gt;200&lt;/span&gt;)
+		fmt.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Fprintf&lt;/span&gt;(w, &lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;echo&amp;#34;&lt;/span&gt;)
+	})
+	s.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Serve&lt;/span&gt;()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;路由配置&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;[{
+  &lt;span style=&#34;color:#000080&#34;&gt;&amp;#34;id&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;auth&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#000080&#34;&gt;&amp;#34;uri&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;lb://localhost:8021&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#000080&#34;&gt;&amp;#34;predicates&amp;#34;&lt;/span&gt;: [
+    {
+    &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;//为自定义断言器工厂的name&lt;/span&gt;
+      &lt;span style=&#34;color:#000080&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;Path&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#000080&#34;&gt;&amp;#34;args&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;/test/*&amp;#34;&lt;/span&gt;
+    }
+  ],
+  &lt;span style=&#34;color:#000080&#34;&gt;&amp;#34;filters&amp;#34;&lt;/span&gt;: [
+    {
+    &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;//为自定义过滤器工厂的name&lt;/span&gt;
+      &lt;span style=&#34;color:#000080&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;RemoveHeader&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#000080&#34;&gt;&amp;#34;args&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;Auth&amp;#34;&lt;/span&gt;
+    }
+  ]
+}]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;自定义断言器predicate&#34;&gt;自定义断言器（Predicate）&lt;/h3&gt;
+&lt;p&gt;断言器是&lt;strong&gt;多例的&lt;/strong&gt;，但是其工厂是&lt;strong&gt;单例的&lt;/strong&gt;
+约定：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;断言器命名以Predicate结尾&lt;/li&gt;
+&lt;li&gt;断言器工厂命名以PredicateFactory结尾&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;自定义断言器 实现RequestPredicate接口&lt;/li&gt;
+&lt;li&gt;自定义断言器工厂 实现RequestPredicateFactory&lt;/li&gt;
+&lt;li&gt;推荐自定义一个Config结构体&lt;/li&gt;
+&lt;li&gt;注册断言器工厂&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;package&lt;/span&gt; predicate
+
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;import&lt;/span&gt; (
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;net/http&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;strings&amp;#34;&lt;/span&gt;
+)
+
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;init&lt;/span&gt;(){
+	&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;RegisterFactory&lt;/span&gt;(&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;method&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;&amp;amp;&lt;/span&gt;MethodPredicateFactory{})
+}
+&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;请求方法Method断言器
+&lt;/span&gt;&lt;span style=&#34;color:#998;font-style:italic&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;type&lt;/span&gt; MethodPredicateFactory &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;struct&lt;/span&gt; {
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;type&lt;/span&gt; MethodRequestPredicate &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;struct&lt;/span&gt;{
+	config MethodConfig
+}
+
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;type&lt;/span&gt; MethodConfig &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;struct&lt;/span&gt; {
+	methods []&lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;string&lt;/span&gt;
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; (p &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;MethodRequestPredicate)&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Test&lt;/span&gt;(r &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;http.Request)&lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;bool&lt;/span&gt;{
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;for&lt;/span&gt; _,method&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;range&lt;/span&gt; p.config.methods{
+		&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;if&lt;/span&gt; method&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;==&lt;/span&gt;r.Method{
+			&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;true&lt;/span&gt;
+		}
+	}
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;false&lt;/span&gt;
+}
+&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;// methods 以逗号进行分割
+&lt;/span&gt;&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; (p &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;MethodPredicateFactory)&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;New&lt;/span&gt;(methods &lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;string&lt;/span&gt;)RequestPredicate{
+	m&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt;strings.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Split&lt;/span&gt;(methods,&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;,&amp;#34;&lt;/span&gt;)
+	&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;// http 中method均是大写
+&lt;/span&gt;&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;for&lt;/span&gt; i,method&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;range&lt;/span&gt; m{
+		m[i]=strings.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;ToUpper&lt;/span&gt;(method)
+	}
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;&amp;amp;&lt;/span&gt;MethodRequestPredicate{MethodConfig{m}}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;自定义过滤器工厂&#34;&gt;自定义过滤器工厂&lt;/h3&gt;
+&lt;p&gt;过滤器是&lt;strong&gt;多例的&lt;/strong&gt;，但是其工厂是&lt;strong&gt;单例&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;约定&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;过滤器命名以Filter结尾&lt;/li&gt;
+&lt;li&gt;过滤器工厂命名以FilterFactory结尾&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;自定义过滤器 实现Filter接口&lt;/li&gt;
+&lt;li&gt;自定义过滤器工厂 实现FilterFactory&lt;/li&gt;
+&lt;li&gt;推荐自定义一个Config结构体&lt;/li&gt;
+&lt;li&gt;注册过滤器工厂&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;代码如下&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;package&lt;/span&gt; filter
+
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;import&lt;/span&gt; (
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;gateway/utils&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;net/http&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;strings&amp;#34;&lt;/span&gt;
+)
+
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;init&lt;/span&gt;(){
+	&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Register&lt;/span&gt;(&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;RemoveHeader&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;&amp;amp;&lt;/span&gt;RemoveHeaderFilterFactory{})
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;type&lt;/span&gt; RemoveHeaderFilterFactory &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;struct&lt;/span&gt;{
+}
+
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;type&lt;/span&gt; RemoveHeaderFilter &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;struct&lt;/span&gt;{
+	config RemoveConfig
+	order &lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;int&lt;/span&gt;
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;type&lt;/span&gt; RemoveConfig &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;struct&lt;/span&gt; {
+	headers []&lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;string&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; (f &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;RemoveHeaderFilter) &lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;PreHandler&lt;/span&gt;(response http.ResponseWriter,request &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;http.Request)&lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;bool&lt;/span&gt;{
+	headers&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt;request.Header
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;for&lt;/span&gt; name,_&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;range&lt;/span&gt; headers{
+		&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;if&lt;/span&gt; utils.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;ContainerString&lt;/span&gt;(f.config.headers,name){
+			headers.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Del&lt;/span&gt;(name)
+		}
+	}
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;true&lt;/span&gt;
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; (f &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;RemoveHeaderFilter) &lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;PostHandler&lt;/span&gt;(response http.ResponseWriter,request &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;http.Request){
+
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; (f &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;RemoveHeaderFilter)&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;getOrder&lt;/span&gt;()&lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;int&lt;/span&gt;{
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; f.order
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; (f &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;RemoveHeaderFilter)&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;SetOrder&lt;/span&gt;(order &lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;int&lt;/span&gt;)Filter{
+	f.order=order
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; f
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; (f &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;RemoveHeaderFilterFactory)&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;New&lt;/span&gt;(config &lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;string&lt;/span&gt;)Filter{
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;&amp;amp;&lt;/span&gt;RemoveHeaderFilter{RemoveConfig{strings.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Split&lt;/span&gt;(config,&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;,&amp;#34;&lt;/span&gt;)},&lt;span style=&#34;color:#099&#34;&gt;0&lt;/span&gt;}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;自定义全局过滤器&#34;&gt;自定义全局过滤器&lt;/h3&gt;
+&lt;p&gt;有时候需要使用全局过滤器，针对的是所有的代理，全局代理器是&lt;strong&gt;单例&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;约定：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;全局过滤器以GlobalFilter结尾&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;自定义过滤器 实现Filter接口&lt;/li&gt;
+&lt;li&gt;注册全局过滤器&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;package&lt;/span&gt; filter
+
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;import&lt;/span&gt; (
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;net/http&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;net/http/httputil&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;net/url&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;trpc-go/log&amp;#34;&lt;/span&gt;
+)
+
+&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;进行注册
+&lt;/span&gt;&lt;span style=&#34;color:#998;font-style:italic&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;init&lt;/span&gt;(){
+	&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;RegisterGlobalFilter&lt;/span&gt;(&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;proxy&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;&amp;amp;&lt;/span&gt;ProxyFilter{order:&lt;span style=&#34;color:#099&#34;&gt;1024&lt;/span&gt;})
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;type&lt;/span&gt; ProxyFilter &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;struct&lt;/span&gt;{
+	order &lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;int&lt;/span&gt;
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; (p &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;ProxyFilter) &lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;PreHandler&lt;/span&gt;(response http.ResponseWriter,request &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;http.Request)&lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;bool&lt;/span&gt;{
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;defer&lt;/span&gt; &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt;(){
+		&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;if&lt;/span&gt; err&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt;&lt;span style=&#34;color:#0086b3&#34;&gt;recover&lt;/span&gt;();err&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;!=&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;nil&lt;/span&gt;{
+			log.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Error&lt;/span&gt;(&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;proxy filter has error&amp;#34;&lt;/span&gt;,err)
+		}
+	}()
+
+	route&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt;request.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Context&lt;/span&gt;().&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Value&lt;/span&gt;(&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;route&amp;#34;&lt;/span&gt;)
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;if&lt;/span&gt; route&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;!=&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;nil&lt;/span&gt;{
+		fmt.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;uri is %s /n&amp;#34;&lt;/span&gt;,route)
+	}&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+		&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;false&lt;/span&gt;
+	}
+	r &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt; route.(&lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;string&lt;/span&gt;)
+	uri,err&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt;url.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Parse&lt;/span&gt;(r)
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;if&lt;/span&gt; err&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;!=&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;nil&lt;/span&gt;{
+		response.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;WriteHeader&lt;/span&gt;(http.StatusInternalServerError)
+		&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;false&lt;/span&gt;
+	}
+	&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;// not support http and https
+&lt;/span&gt;&lt;span style=&#34;color:#998;font-style:italic&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;if&lt;/span&gt; uri.Scheme&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;!=&lt;/span&gt;&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;http&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;||&lt;/span&gt;uri.Scheme&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;!=&lt;/span&gt;&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;https&amp;#34;&lt;/span&gt;{
+		response.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;WriteHeader&lt;/span&gt;(http.StatusInternalServerError)
+		&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;false&lt;/span&gt;
+	}
+	proxy &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:=&lt;/span&gt; httputil.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;NewSingleHostReverseProxy&lt;/span&gt;(uri)
+	proxy.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;ServeHTTP&lt;/span&gt;(response, request)
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;true&lt;/span&gt;
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; (p &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;ProxyFilter) &lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;PostHandler&lt;/span&gt;(response http.ResponseWriter,request &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;http.Request){
+	fmt.&lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#d14&#34;&gt;&amp;#34;proxy complete&amp;#34;&lt;/span&gt;)
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; (p &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;ProxyFilter) &lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;getOrder&lt;/span&gt;()&lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;int&lt;/span&gt;{
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; p.order
+}
+&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;func&lt;/span&gt; (p &lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;*&lt;/span&gt;ProxyFilter) &lt;span style=&#34;color:#900;font-weight:bold&#34;&gt;SetOrder&lt;/span&gt;(order &lt;span style=&#34;color:#458;font-weight:bold&#34;&gt;int&lt;/span&gt;)Filter{
+	p.order=order
+	&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;return&lt;/span&gt; p
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
       <title>一次OkHTTP3 网络排查</title>
       <link>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
