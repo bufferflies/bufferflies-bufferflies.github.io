@@ -167,6 +167,137 @@ http——proxy 提供http代理&lt;/p&gt;
     </item>
     
     <item>
+      <title>API 网关设计 OAuth2</title>
+      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3-%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E9%99%86/</guid>
+      
+        <description>&lt;h1 id=&#34;领域模型&#34;&gt;领域模型&lt;/h1&gt;
+&lt;p&gt;核心功能：为网关提供用户认证服务
+提供的功能：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;能够接入支持OAuth2的认证服务&lt;/li&gt;
+&lt;li&gt;用户登陆成功后可以跳转到之前访问的页面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;领域图&#34;&gt;领域图&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;
+storage request
+storage proxy 
+storage token
+storage identification
+
+rectangle verify{
+    storage Verify 
+}
+rectangle signature{
+    storage Signature 
+}
+rectangle Jwt{ 
+}
+rectangle auth{
+    storage Auth 
+    storage OAuth2
+    OAuth2-&amp;gt;Auth 
+}
+
+request &amp;lt;-&amp;gt;proxy: proxy
+request ..&amp;gt; token:carry
+token --&amp;gt; Verify: use
+identification &amp;lt;-- Verify: verify
+
+identification &amp;lt;--Auth : consult 
+
+
+identification --&amp;gt;Signature: use
+token &amp;lt;--Signature: sign
+Verify&amp;lt;--Jwt
+Signature&amp;lt;--Jwt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Signature: 负责加签，
+Verify: 负责解签，可以获取加签之前的内容
+Auth：获取用户信息&lt;/p&gt;
+&lt;p&gt;identify： 用户信息
+token： 加签过后的凭证&lt;/p&gt;
+&lt;h2 id=&#34;类图&#34;&gt;类图&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;
+interface Signature{
+    sign(Object signature): String
+}
+interface Verify{
+    verify(String token): Object
+}
+
+interface Auth{
+    consult(String code):Object
+}
+
+interface State{
+    encode(URL url): String code
+    decode(String code): URL url 
+}
+
+class SimpleState{
+    - Duration expired
+    - Integer size 
+    encode(URL url): String code
+    decode(String code): URL url
+}
+
+class JwtSignature {
+     - SignatureAlgorithm alg
+     - Duration expired
+     - String issue
+     - String subject
+     sign(Object signature): String
+     verify(String token): Object
+}
+
+class OAuth2{
+    - String urlTemplate
+    - RestTemplate client
+    consult(String code):Object
+}
+
+Signature &amp;lt;-- JwtSignature
+Verify &amp;lt;-- JwtSignature
+State &amp;lt;-- SimpleState
+Auth&amp;lt;--OAuth2
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;时序图&#34;&gt;时序图&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;
+actor User as U
+control Gateway as G
+control AuthFilter as A
+control UserAction as AC
+control Proxy as P
+control service as S 
+control OAuth2 as O
+
+== request with legal token ==
+U -&amp;gt; G: send xxx.weling.com/auth/xxx
+G -&amp;gt; A: validate token
+A --&amp;gt; G: token is legal
+G -&amp;gt; P: send auth.weling.com/xxx 
+P -&amp;gt; S: handler
+S --&amp;gt; P: return result
+P --&amp;gt; G: post handler
+G --&amp;gt; U: render 
+== request with nothing ==
+
+U -&amp;gt; G : request xxx.weling.com/auth/xxx
+G -&amp;gt; A : verify token
+A -&amp;gt; G : token is illegal
+G -&amp;gt; O : 302 open.weixin.qq.com? \n appid=xxx\n&amp;amp;redirect_url=xxx.weling.com/consult/ xxx \n&amp;amp;scope=xxx\n&amp;amp;state=xxx.weling.com/auth/xxx
+O -&amp;gt;O : wait user login 
+O --&amp;gt;G : 302  xxx.weling.com/consult&amp;amp;code=xxx&amp;amp;\nstate=xxx.weling.com/auth/xxx
+G -&amp;gt; O : consult identification \nopen.weixin.qq.com\n&amp;amp;appid=xxx\n&amp;amp;code=xxx\n&amp;amp;secret=xxx
+O --&amp;gt;G : return identify 
+G --&amp;gt;U : return redirect html \n and set cookie
+U -&amp;gt;U : set cookie and redirect
+&lt;/code&gt;&lt;/pre&gt;</description>
+      
+    </item>
+    
+    <item>
       <title>API 网关设计 插件编写</title>
       <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
