@@ -24,6 +24,149 @@
     </item>
     
     <item>
+      <title>API 网关设计</title>
+      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</guid>
+      
+        <description>&lt;h1 id=&#34;网关评审&#34;&gt;网关评审&lt;/h1&gt;
+&lt;h2 id=&#34;需求&#34;&gt;需求&lt;/h2&gt;
+&lt;p&gt;需要的能力：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;路由&lt;/li&gt;
+&lt;li&gt;协议转换&lt;/li&gt;
+&lt;li&gt;服务发现&lt;/li&gt;
+&lt;li&gt;mertices监控&lt;/li&gt;
+&lt;li&gt;路由动态更新&lt;/li&gt;
+&lt;li&gt;支持OAuth2，LDAP身份认证&lt;/li&gt;
+&lt;li&gt;熔断&lt;/li&gt;
+&lt;li&gt;重试&lt;/li&gt;
+&lt;li&gt;流量控制&lt;/li&gt;
+&lt;li&gt;负载均衡&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;场景一&#34;&gt;场景一&lt;/h3&gt;
+&lt;p&gt;请求直接到后端服务&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;node request
+
+node services1
+node services2
+
+request--&amp;gt;services1
+request--&amp;gt;services2
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;场景二&#34;&gt;场景二&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;node request
+
+node gateway
+node consul
+
+node services1
+node services2
+
+request--&amp;gt;gateway: send request
+gateway-&amp;gt;consul: send server name 
+consul--&amp;gt; gateway: return ip table
+
+gateway--&amp;gt;services1
+gateway--&amp;gt;services2
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;网关主要的功能：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对请求进行鉴权 这一块业务性质比较重&lt;/li&gt;
+&lt;li&gt;统计请求耗时，加监控，业务性质比较重&lt;/li&gt;
+&lt;li&gt;匹配请求，选择最合适的路由进行转发&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因此主要的功能：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;能够自定义全局过滤器，适用到所有请求 ，如监控&lt;/li&gt;
+&lt;li&gt;能够自定义断言器，根据请求来决定其访问的服务&lt;/li&gt;
+&lt;li&gt;能够自定义过滤器，配合断言器，适用于指定的请求&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;janus设计&#34;&gt;Janus设计&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;storage predicate {
+    storage PredicateFactory
+    storage PathPredicateFactory
+    PredicateFactory&amp;lt;--PathPredicateFactory
+}
+storage route {
+     storage id
+     storage uri 
+     storage Predicate
+     storage FilterChain
+     storage Filter
+     id--&amp;gt;uri
+     id--&amp;gt;Predicate
+     id--&amp;gt;FilterChain
+     FilterChain--&amp;gt;Filter: filter
+}
+storage WebHandler{
+    card Routes
+}
+storage filter {
+    storage FilterFactory
+    storage RemoveFilterFactory 
+    FilterFactory&amp;lt;--RemoveFilterFactory
+}
+control request
+Filter&amp;lt;--FilterFactory:factory
+Predicate&amp;lt;--PredicateFactory: factory
+request -&amp;gt;WebHandler
+WebHandler-&amp;gt;route
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;后期的想法&#34;&gt;后期的想法&lt;/h2&gt;
+&lt;h3 id=&#34;依靠trpc所有服务暴露多种协议&#34;&gt;依靠trpc，所有服务暴露多种协议&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;node request
+
+node gateway
+node consul
+
+storage {
+   card container1
+   node services1
+   container1-&amp;gt;services1
+}
+storage {
+   card container2
+   node services2
+   container2-&amp;gt;services2
+}
+node services2
+
+request--&amp;gt;gateway: send request
+gateway-&amp;gt;consul: send server name 
+consul-&amp;gt; gateway: return ip table
+
+gateway--&amp;gt;container1
+gateway--&amp;gt;container2
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;container 作为容器 提供各种协议
+service 专注于业务 容器会将socket转换到相应的入参&lt;/p&gt;
+&lt;h3 id=&#34;在网关上进行配置-指定协议&#34;&gt;在网关上进行配置 指定协议&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-plantuml&#34; data-lang=&#34;plantuml&#34;&gt;node http_request
+
+node gateway
+node consul
+
+node http_proxy
+node grpc_proxy
+
+node services1
+node services2
+
+http_request--&amp;gt;gateway: send request
+gateway-&amp;gt;consul: send server name 
+consul-&amp;gt; gateway: return ip table
+
+gateway--&amp;gt;http_proxy: proxy
+gateway--&amp;gt;grpc_proxy: proxy
+
+http_proxy--&amp;gt;services1: handle
+grpc_proxy--&amp;gt;services2: handle
+
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;grpc_proxy 提供Http转rpc功能
+http——proxy 提供http代理&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>一次OkHTTP3 网络排查</title>
       <link>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>

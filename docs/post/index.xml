@@ -9,6 +9,15 @@
     <copyright>bufferflies</copyright>
     <lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>API 网关设计</title>
+      <link>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</guid>
+      <description>网关评审 需求 需要的能力： 路由 协议转换 服务发现 mertices监控 路由动态更新 支持OAuth2，LDAP身份认证 熔断 重试 流量控制 负载均衡 场景一</description>
+    </item>
+    
+    <item>
       <title>一次OkHTTP3 网络排查</title>
       <link>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/</link>
       <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>

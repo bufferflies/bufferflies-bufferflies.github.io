@@ -9,6 +9,13 @@
   </url>
   
   <url>
+    <loc>https://bufferflies.github.io/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</loc>
+    <lastmod>2021-02-26T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://bufferflies.github.io/</loc>
     <lastmod>2021-02-26T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -17,6 +24,20 @@
   
   <url>
     <loc>https://bufferflies.github.io/categories/</loc>
+    <lastmod>2021-02-26T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://bufferflies.github.io/categories/gateway/</loc>
+    <lastmod>2021-02-26T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://bufferflies.github.io/tags/go/</loc>
     <lastmod>2021-02-26T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

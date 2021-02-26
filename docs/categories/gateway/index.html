@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>blog for bufferflies</title>
+  <title>gateway · blog for bufferflies</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -34,8 +34,8 @@
 <meta name="generator" content="Hugo 0.78.2" />
 
 
-<link rel="canonical" href="https://bufferflies.github.io/" />
-<link href="/index.xml" rel="alternate" type="application/rss+xml" title="blog for bufferflies" />
+<link rel="canonical" href="https://bufferflies.github.io/categories/gateway/" />
+<link href="/categories/gateway/index.xml" rel="alternate" type="application/rss+xml" title="blog for bufferflies" />
 
 
 
@@ -58,15 +58,15 @@
 
 
 
-<meta property="og:title" content="blog for bufferflies" />
+<meta property="og:title" content="gateway" />
 <meta property="og:description" content="blog for bufferflies" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://bufferflies.github.io/" />
+<meta property="og:url" content="https://bufferflies.github.io/categories/gateway/" />
 <meta property="og:updated_time" content="2021-02-26T00:00:00+00:00" />
-<meta itemprop="name" content="blog for bufferflies">
+<meta itemprop="name" content="gateway">
 <meta itemprop="description" content="blog for bufferflies">
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="blog for bufferflies"/>
+<meta name="twitter:title" content="gateway"/>
 <meta name="twitter:description" content="blog for bufferflies"/>
 
 <!--[if lte IE 9]>
@@ -232,7 +232,7 @@
   <ul id="menu" class="menu">
     
     
-        <li class="menu-item active">
+        <li class="menu-item">
         
           
           
@@ -325,114 +325,27 @@
       <div class="content-wrapper">
         <div id="content" class="content container">
           
-<section id="posts" class="posts">
-  
+
+<section id="archive" class="archive">
   
     
-  
-  
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/">API 网关设计</a>
-    </h1>
+      <div class="archive-title category">
+        <h2 class="archive-name">gateway</h2>
+      </div>
     
-    <div class="post-meta">
-      <time datetime="2021-02-26" class="post-time">
+  
+
+  
+    <div class="archive-post">
+      <time datetime="2021-02-26" class="archive-post-time">
         2021-02-26
       </time>
-      <div class="post-category">
-          <a href="https://bufferflies.github.io/categories/gateway/"> gateway </a>
-          
-        </div>
-      
-      
-      
+      <span class="archive-post-title">
+        <a href="/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/" class="archive-post-link">
+          API 网关设计
+        </a>
+      </span>
     </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      网关评审 需求 需要的能力： 路由 协议转换 服务发现 mertices监控 路由动态更新 支持OAuth2，LDAP身份认证 熔断 重试 流量控制 负载均衡 场景一
-    </div>
-    <div class="read-more">
-      <a href="/post/api-%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/" class="read-more-link"></a>
-    </div>
-    
-  </div>
-</article>
-
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/">一次OkHTTP3 网络排查</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2021-02-26" class="post-time">
-        2021-02-26
-      </time>
-      <div class="post-category">
-          <a href="https://bufferflies.github.io/categories/net/"> net </a>
-          
-        </div>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      记一次http pipeline异常 背景 服务依赖关系 storage Client{ storage OkHttp storage Netty } storage Server{ storage Control storage Tomcat } OkHttp-&gt;Netty Netty.&gt;Tomcat Tomcat -&gt; Control 现象 每天偶现5次左右API调用返回400现象, 查询S
-    </div>
-    <div class="read-more">
-      <a href="/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/" class="read-more-link"></a>
-    </div>
-    
-  </div>
-</article>
-
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/post/zsh-%E5%AE%89%E8%A3%85/">zsh</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2021-02-20" class="post-time">
-        2021-02-20
-      </time>
-      <div class="post-category">
-          <a href="https://bufferflies.github.io/categories/shell/"> shell </a>
-          
-        </div>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      安装oh-my-zsh sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot; 安装插件 进入oh-my-zsh插件库中 cd ~/.oh-my-zsh/custom/plugins/ 下载插件（自动补全为例） git clone git://github.com/zsh-users/zsh-autosuggestions 其实插件名就是仓库名（zsh-aut
-    </div>
-    <div class="read-more">
-      <a href="/post/zsh-%E5%AE%89%E8%A3%85/" class="read-more-link"></a>
-    </div>
-    
-  </div>
-</article>
-
   
 </section>
 
@@ -456,23 +369,6 @@
 
   
   
-  <nav class="pagination">
-    <ul>
-      
-      <li  class="active" >
-        <a href="/">1</a>
-      </li>
-      
-      <li >
-        <a href="/page/2/">2</a>
-      </li>
-      
-    </ul>
-  </nav>
-
-  
-  
-
 
 
 
@@ -573,29 +469,7 @@
 
 
 
-<script src="https://cdn.jsdelivr.net/gh/jmnote/plantuml-encoder@1.2.4/dist/plantuml-encoder.min.js" integrity="sha256-Qsk2KRBCN5qVZX7B+8+2IvQl1Aqc723qV1tBCQaVoqo=" crossorigin="anonymous"></script>
-<script>
-(function(){
-  let plantumlPrefix = "language-plantuml";
-  Array.prototype.forEach.call(document.querySelectorAll("[class^=" + plantumlPrefix + "]"), function(code){
-    let image = document.createElement("IMG");
-    image.loading = 'lazy'; 
-    image.src = 'http://www.plantuml.com/plantuml/svg/~1' + plantumlEncoder.encode(code.innerText);
-    code.parentNode.insertBefore(image, code);
-    code.style.display = 'none';
-  });
-})();
-</script>
 
-
-
-  <script type="text/javascript">
-    window.MathJax = {
-      showProcessingMessages: false,
-      messageStyle: 'none'
-    };
-  </script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
 
 
