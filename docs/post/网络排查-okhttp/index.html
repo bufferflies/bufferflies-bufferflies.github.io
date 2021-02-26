@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>blog for bufferflies</title>
+  <title>一次OkHTTP3 网络排查 - blog for bufferflies</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="bufferflies" />
-  <meta name="description" content="blog for bufferflies" />
+  <meta name="description" content="记一次http pipeline异常 背景 服务依赖关系 storage Client{ storage OkHttp storage Netty } storage Server{ storage Control storage Tomcat } OkHttp-&amp;gt;Netty Netty.&amp;gt;Tomcat Tomcat -&amp;gt; Control 现象 每天偶现5次左右API调用返回400现象, 查询S" />
+
   <meta name="keywords" content="Bufferflies, IT, " />
 
 
@@ -34,8 +35,8 @@
 <meta name="generator" content="Hugo 0.78.2" />
 
 
-<link rel="canonical" href="https://bufferflies.github.io/" />
-<link href="/index.xml" rel="alternate" type="application/rss+xml" title="blog for bufferflies" />
+<link rel="canonical" href="https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/" />
+
 
 
 
@@ -58,16 +59,24 @@
 
 
 
-<meta property="og:title" content="blog for bufferflies" />
-<meta property="og:description" content="blog for bufferflies" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://bufferflies.github.io/" />
-<meta property="og:updated_time" content="2021-02-26T00:00:00+00:00" />
-<meta itemprop="name" content="blog for bufferflies">
-<meta itemprop="description" content="blog for bufferflies">
+<meta property="og:title" content="一次OkHTTP3 网络排查" />
+<meta property="og:description" content="记一次http pipeline异常 背景 服务依赖关系 storage Client{ storage OkHttp storage Netty } storage Server{ storage Control storage Tomcat } OkHttp-&gt;Netty Netty.&gt;Tomcat Tomcat -&gt; Control 现象 每天偶现5次左右API调用返回400现象, 查询S" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/" />
+<meta property="article:published_time" content="2021-02-26T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-02-26T00:00:00+00:00" />
+<meta itemprop="name" content="一次OkHTTP3 网络排查">
+<meta itemprop="description" content="记一次http pipeline异常 背景 服务依赖关系 storage Client{ storage OkHttp storage Netty } storage Server{ storage Control storage Tomcat } OkHttp-&gt;Netty Netty.&gt;Tomcat Tomcat -&gt; Control 现象 每天偶现5次左右API调用返回400现象, 查询S">
+<meta itemprop="datePublished" content="2021-02-26T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-02-26T00:00:00+00:00" />
+<meta itemprop="wordCount" content="509">
+
+
+
+<meta itemprop="keywords" content="java,OkHttp," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="blog for bufferflies"/>
-<meta name="twitter:description" content="blog for bufferflies"/>
+<meta name="twitter:title" content="一次OkHTTP3 网络排查"/>
+<meta name="twitter:description" content="记一次http pipeline异常 背景 服务依赖关系 storage Client{ storage OkHttp storage Netty } storage Server{ storage Control storage Tomcat } OkHttp-&gt;Netty Netty.&gt;Tomcat Tomcat -&gt; Control 现象 每天偶现5次左右API调用返回400现象, 查询S"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -232,7 +241,7 @@
   <ul id="menu" class="menu">
     
     
-        <li class="menu-item active">
+        <li class="menu-item">
         
           
           
@@ -324,159 +333,181 @@
     <main id="main" class="main bg-llight">
       <div class="content-wrapper">
         <div id="content" class="content container">
-          
-<section id="posts" class="posts">
-  
-  
+          <article class="post bg-white">
     
-  
-  
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
+    <header class="post-header">
+      <h1 class="post-title">一次OkHTTP3 网络排查</h1>
       
-      <a class="post-link" href="/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/">一次OkHTTP3 网络排查</a>
-    </h1>
+      <div class="post-meta">
+        <time datetime="2021-02-26" class="post-time">
+          2021-02-26
+        </time>
+        <div class="post-category">
+            <a href="https://bufferflies.github.io/categories/net/"> net </a>
+            
+          </div>
+        
+
+        
+        
+
+        
+        
+      </div>
+    </header>
+
     
-    <div class="post-meta">
-      <time datetime="2021-02-26" class="post-time">
-        2021-02-26
-      </time>
-      <div class="post-category">
-          <a href="https://bufferflies.github.io/categories/net/"> net </a>
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title"></h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#背景">背景</a>
+      <ul>
+        <li><a href="#服务依赖关系">服务依赖关系</a></li>
+        <li><a href="#现象">现象</a></li>
+      </ul>
+    </li>
+    <li><a href="#排查流程">排查流程</a>
+      <ul>
+        <li><a href="#抓包">抓包</a></li>
+      </ul>
+    </li>
+    <li><a href="#处理方法">处理方法</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      <h1 id="记一次http-pipeline异常">记一次http pipeline异常</h1>
+<h2 id="背景">背景</h2>
+<h3 id="服务依赖关系">服务依赖关系</h3>
+<pre><code class="language-plantuml" data-lang="plantuml">storage Client{
+    storage OkHttp
+    storage Netty
+}
+storage Server{
+    storage Control 
+    storage Tomcat
+}
+
+OkHttp-&gt;Netty
+Netty.&gt;Tomcat
+Tomcat -&gt; Control
+</code></pre><h3 id="现象">现象</h3>
+<p>每天偶现5次左右API调用返回400现象, 查询Server端日志：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#000;font-weight:bold">[</span>DEBUG<span style="color:#000;font-weight:bold">]</span> <span style="color:#000;font-weight:bold">[</span>io.undertow.server.protocol.http.HttpReadListener sendBadRequestAndClose 284<span style="color:#000;font-weight:bold">]</span> - UT005014: Failed to parse request i in request-targetdRequestException: UT000165: Invalid character 
+        at io.undertow.server.protocol.http.HttpRequestParser.handlePath<span style="color:#000;font-weight:bold">(</span>HttpRequestParser.java:382<span style="color:#000;font-weight:bold">)</span> ~<span style="color:#000;font-weight:bold">[</span>undertow-core-1.4.26.Final.jar!/:1.4.26.Final<span style="color:#000;font-weight:bold">]</span>
+        at io.undertow.server.protocol.http.HttpRequestParser.handle<span style="color:#000;font-weight:bold">(</span>HttpRequestParser.java:248<span style="color:#000;font-weight:bold">)</span> ~<span style="color:#000;font-weight:bold">[</span>undertow-core-1.4.26.Final.jar!/:1.4.26.Final<span style="color:#000;font-weight:bold">]</span>
+        at io.undertow.server.protocol.http.HttpReadListener.handleEventWithNoRunningRequest<span style="color:#000;font-weight:bold">(</span>HttpReadListener.java:187<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">[</span>undertow-core-1.4.26.Final.jar!/:1.4.26.Final<span style="color:#000;font-weight:bold">]</span>
+        at io.undertow.server.protocol.http.HttpReadListener.handleEvent<span style="color:#000;font-weight:bold">(</span>HttpReadListener.java:136<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">[</span>undertow-core-1.4.26.Final.jar!/:1.4.26.Final<span style="color:#000;font-weight:bold">]</span>
+        at io.undertow.server.protocol.http.HttpReadListener.handleEvent<span style="color:#000;font-weight:bold">(</span>HttpReadListener.java:59<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">[</span>undertow-core-1.4.26.Final.jar!/:1.4.26.Final<span style="color:#000;font-weight:bold">]</span>
+</code></pre></div><h2 id="排查流程">排查流程</h2>
+<p>根据日志异常提示，报文中存在非法字符，两方面排查:</p>
+<ol>
+<li>服务端容器对HTTP协议解析有问题</li>
+<li>客户端发过来的请求存在非法字符</li>
+</ol>
+<p>首先尝试换容器，使用tomcat替换undertow， 线上运行测试，发现问题依然存在，开始抓包</p>
+<h3 id="抓包">抓包</h3>
+<p>抓包结果如下图，出现6次400请求：
+<img src="/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A51.jpg" alt="-w1040"></p>
+<p>使用tcp follow 查看一下报文，并没有发现异常情况：
+<img src="/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A52.jpg" alt="-w981"></p>
+<p>具体查看一下报文：
+<img src="/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A53.jpg" alt="-w1513"></p>
+<p><strong>查看上面报文发现请求中携带content-length</strong></p>
+<p>继续看看body中的内容：</p>
+<p><img src="/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A55.jpg" alt="-w803"></p>
+<p>发现content中的是下一个http 请求（请求B）， 请求B的一部分被放到上一个请求中，导致Server端无法解析请求B，报出非法字符，返回400 请求</p>
+<p>继续查看一下http follow情况，如下图， 请求B的一部分：
+<img src="/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A56.jpg" alt="-w996"></p>
+<p>验证之前的分析，这个请求不是Pipeline，正常的pipeline格式如下：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#0086b3">echo</span> -en <span style="color:#d14">&#34;GET /index.html HTTP/1.1\r\nHost: example.com\r\n\r\nGET /other.html HTTP/1.1\r\nHost: example.com\r\n\r\n&#34;</span> | nc example.com <span style="color:#099">80</span>
+</code></pre></div><h2 id="处理方法">处理方法</h2>
+<ol>
+<li>升级OKHttp到4.0</li>
+<li>不使用OKHttp ，使用HttpComponent</li>
+</ol>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title"></span>
+    <span class="item-content">bufferflies</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title"></span>
+    <span class="item-content">
+      2021-02-26
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title"></span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://bufferflies.github.io/tags/java/">java</a>
+          <a href="https://bufferflies.github.io/tags/okhttp/">OkHttp</a>
           
         </div>
+
       
-      
-      
-    </div>
-  </header>
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/zsh-%E5%AE%89%E8%A3%85/">
+            <span class="next-text nav-default">zsh</span>
+            <span class="prev-text nav-mobile"></span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
   
-  <div class="post-content">
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
     
-    <div class="post-summary">
-      记一次http pipeline异常 背景 服务依赖关系 storage Client{ storage OkHttp storage Netty } storage Server{ storage Control storage Tomcat } OkHttp-&gt;Netty Netty.&gt;Tomcat Tomcat -&gt; Control 现象 每天偶现5次左右API调用返回400现象, 查询S
-    </div>
-    <div class="read-more">
-      <a href="/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/" class="read-more-link"></a>
-    </div>
-    
-  </div>
-</article>
 
   
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/post/zsh-%E5%AE%89%E8%A3%85/">zsh</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2021-02-20" class="post-time">
-        2021-02-20
-      </time>
-      <div class="post-category">
-          <a href="https://bufferflies.github.io/categories/shell/"> shell </a>
-          
-        </div>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      安装oh-my-zsh sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot; 安装插件 进入oh-my-zsh插件库中 cd ~/.oh-my-zsh/custom/plugins/ 下载插件（自动补全为例） git clone git://github.com/zsh-users/zsh-autosuggestions 其实插件名就是仓库名（zsh-aut
-    </div>
-    <div class="read-more">
-      <a href="/post/zsh-%E5%AE%89%E8%A3%85/" class="read-more-link"></a>
-    </div>
-    
-  </div>
-</article>
-
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/post/%E7%BD%91%E7%BB%9C/">网络基础</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2020-11-05" class="post-time">
-        2020-11-05
-      </time>
-      <div class="post-category">
-          <a href="https://bufferflies.github.io/categories/net/"> net </a>
-          
-        </div>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      网络基础协议
-    </div>
-    <div class="read-more">
-      <a href="/post/%E7%BD%91%E7%BB%9C/" class="read-more-link"></a>
-    </div>
-    
-  </div>
-</article>
-
-  
-</section>
-
-
-
-
-
-
-  
-  
-  
-
-  
-  
-
-  
-  
-
-  
-  
-
-  
-  
-  <nav class="pagination">
-    <ul>
-      
-      <li  class="active" >
-        <a href="/">1</a>
-      </li>
-      
-      <li >
-        <a href="/page/2/">2</a>
-      </li>
-      
-    </ul>
-  </nav>
-
-  
-  
-
-
-
-
-
 
         </div>
       </div>

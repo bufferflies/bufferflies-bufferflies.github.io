@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>net on blog for bufferflies</title>
-    <link>https://bufferflies.github.io/categories/net/</link>
-    <description>Recent content in net on blog for bufferflies</description>
+    <title>OkHttp on blog for bufferflies</title>
+    <link>https://bufferflies.github.io/tags/okhttp/</link>
+    <description>Recent content in OkHttp on blog for bufferflies</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>bufferflies</copyright>
-    <lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/categories/net/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 26 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bufferflies.github.io/tags/okhttp/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>一次OkHTTP3 网络排查</title>
       <link>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/</link>
@@ -15,15 +15,6 @@
       
       <guid>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5-okhttp/</guid>
       <description>记一次http pipeline异常 背景 服务依赖关系 storage Client{ storage OkHttp storage Netty } storage Server{ storage Control storage Tomcat } OkHttp-&amp;gt;Netty Netty.&amp;gt;Tomcat Tomcat -&amp;gt; Control 现象 每天偶现5次左右API调用返回400现象, 查询S</description>
-    </item>
-    
-    <item>
-      <title>网络基础</title>
-      <link>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C/</link>
-      <pubDate>Thu, 05 Nov 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://bufferflies.github.io/post/%E7%BD%91%E7%BB%9C/</guid>
-      <description>网络基础协议</description>
     </item>
     
   </channel>
